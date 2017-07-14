@@ -95,6 +95,49 @@ git checkout master          ->  切换到 master 分支
 git merge branch2            ->  将 branch2 和并到 当前工作分支(master)
 
 
+
+ push 冲突应该做的几件事情：
+  1） 先修改冲突，再提交
+      1. git pull   ->  提示冲突
+      2. 查看冲突文件，修改冲突，然后执行 commit -> push
+  2） git status 查看文件状态
+  3） git merge --abort 取消此次合并。
+  
+  
+git branch  - 查看 查看branch
+git branch newBranch  -> 创建 branch
+git checkout someBranch  ->  切换到某个branch 
+
+特殊用法：
+  修给了一个 工作区的文件(hello.py), 没有 commit，  可以通过 git checkout --hello.py 将暂存区的文件拉回来。
+  使用 checkout 还可以还原到某一个版本的某一个状态
+    1. 查看 git log , 得到我们需要的版本号 hash 码。
+    2. git checkout <hashcode> hello.py
+    3. git checkout HEAD hello.py   返回到最近的一次提交
+    4. git checkout HEAD～2 hello.py   返回到最近的一次提交
+    
+ 
+ git reset   ->  重置 HEAD 到指定的状态 
+    1. git reset --mixed HEAD~     ->   将最早的 commit 的本地仓库版本 复制到 暂存区，覆盖 ，默认的方式！！！
+    2. git reset --hard HEAD~      ->   将最早的 commit 的本地仓库版本 复制到 暂存区和工作区，覆盖
+    3. git reset --soft HEAD~      ->   将 HEAD 指向最早的commit 的本地仓库版本， 但不往暂存区和工作区复制
+    
+    
+
+git revert     ->  撤销已经存在的一些提交(commit)
+    git revert <hashcode>              ->    会将 revert 作为 commit 保存起来，也不会覆盖之前的记录
+    git reset  --hard <hashcode>       ->   抹去之后的 commit 记录
+    
+    
+    
+git cherry-pick 用于把某次提交的内容合并到当前分支
+   应用场景：
+      执行了 多次 commit , 每次都对应于 一个 hashcode, 但是并不想更新所有的 commit 到某个分支上，执行 push 更新，
+      可以使用  git cherry-pick <hashcode> 只合并某一个版本到当前分支上。
+      
+
+git rebase 用于把一个分支的修改合并到当前分支
+
   
 
 
@@ -103,3 +146,5 @@ git merge branch2            ->  将 branch2 和并到 当前工作分支(master
 
 
 
+
+ 
