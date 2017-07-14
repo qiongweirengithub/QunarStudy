@@ -50,6 +50,33 @@ vim  .gitignore
 mkdir gittest
 cd gittest
 git init
+git remote add origin <url>
+
+git remote remove origin    ->  解除关联
+
+git remote -v :
+    查看关联关系
+    
+
+查看帮助   
+    git remote --help
+
+
+
+git status    ->  跟踪每个文件的状态， 
+git log       ->  只记录 提交(commint)日志，远程与本地都会记录这个 commit 日志 
+git reflog    ->   所有日志, 只记录在本地
+
+
+
+git config --add user.name qiongwei.rem
+git config --add user.email qiongwei_ren@163.com
+查看配置：
+  git config -e  查看config 内容
+增加上面的两句话可以切换  reflog 的 author 信息
+
+
+
 
 
 
