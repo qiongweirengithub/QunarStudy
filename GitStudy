@@ -29,6 +29,31 @@ Git 三种状态：
   
 git diff          ->   工作区文件与暂存区文件的不同
 git diff staged   ->   暂存区文件与上次commit的文件(本地仓库)的区别
+git diff branch1 branch2   ->  两个分支上最新的提交做比较
+更多介绍：
+  http://www.cnblogs.com/wish123/p/3963224.html
+  
+ 
+ 
+ssh 登录git：
+ 
+ 
+git status :
+    查看未追踪(未提交)的文件
+
+vim  .gitignore 
+    设置不需要追踪的文件
+    
+    
+    
+    
+mkdir gittest
+cd gittest
+git init
+
+
+
+
 
   
 
