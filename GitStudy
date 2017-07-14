@@ -130,7 +130,7 @@ git revert     ->  撤销已经存在的一些提交(commit)
     
     
     
-git cherry-pick 用于把某次提交的内容合并到当前分支
+git cherry-pick 用于把某次提交的内容合并到当前分支，可以针对单个文件的 commit 进行修改
    应用场景：
       执行了 多次 commit , 每次都对应于 一个 hashcode, 但是并不想更新所有的 commit 到某个分支上，执行 push 更新，
       可以使用  git cherry-pick <hashcode> 只合并某一个版本到当前分支上。
