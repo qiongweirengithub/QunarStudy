@@ -119,7 +119,72 @@ site LifeCycle： 分为4个阶段：
     4. mvn site-deploy， 站点部署，qunar不用，感兴趣访问：
                 http://blog.csdn.net/cruise_h/article/details/17188399
         
+Idea maven  配置
+    1. file -> setting -> BUild,Execution   ->  Build Tools   ->  Maven 
+        1. Maven home directory
+        2. user setting file
+        3. local repository
+groupid:
+    项目组的唯一标识
+artifactid:
+    项目的唯一标识
+
+
+Qunar 项目文件的包命名：
+    源文件包：   com.qunar.业务线.项目组标识  + 文件名(项目标识)
+    测试包:      com.qunar.业务线.项目组标识  + 文件名(项目标识)
+
+
+Pom 文件的介绍
+    1.  project 是根源素
+        modelVersion  POM 版本
+        <parent>    ->  父 POM
         
+    2. pom 文件通过坐标 管理项目
+        1. groupId       定义属于哪个组，与项目所在的组织或公司有关
+        2. artifactId    当前maven项目在组内的唯一ID
+        3. version       版本
+        4. name           
+
+     3. 项目打包时配置：
+        build   :        finalname
+        选择相应的环境:     profile 文件
+        
+ Pom 标签：
+    <project>
+    <modelVersion>
+    
+    <parent>
+    
+    <groupId>
+    <artifactId>
+    <version>
+    <packaging>
+    <name>
+    
+    <properties>
+        <java-version>
+        ...
+        <profiles.dir>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+    
+    <dependencies>
+        <dependency>
+    
+ 
+    <profiles>                 ................配置管理，环境配置，重点..............
+        <profile>
+            
+    <build>                    ................重点.......................
+        <finalName>            
+        <plugin>
+ 
+ 
+ 
+ 
  
  
             
