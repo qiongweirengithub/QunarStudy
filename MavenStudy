@@ -76,6 +76,51 @@ maven install：
     将 package 生成的 jar 包部署到本地，输出信息的关键词：  Installing    
 
             
-            
+构建的生命周期：
+    定义一组 阶段的序列，每组阶段(即某一个完整的生命周期)定义了目标被执行的顺序，每个阶段是生命周期的一部分。
+ maven 构建生命周期：
+    maven 构建工程的时候，会按照定义的阶段序列的顺序 执行每个阶段 注册的目标，maven 有3个 标准的 相互独立的 生命周期
+        1. clean LifeCycle
+        2. default(or build) LifeCycle
+        3. site LifeCycle
+ 
+ 每个生命周期分为几个阶段
+    maven clean:
+        1. mvn pre-clean      准备
+        2. mvn clean          删除
+        2. mvn post-clean     后续工作
+
+
+default LifeCycle: 共7个步骤, 23个阶段, 执行每个阶段都是有提示输出到屏幕。
+    1. mvn pre-resources   准备资源
+        复制资源(resource文件下)到target目录下，
+    2. mvn compile         编译源文件
+        将源文件编译到 target 下的 classes 下， 
+    3. mvn test-compile    编译 test 路径下的代码
+        只编译 test 路径下的源文件，到 test-classes 文件夹下
+    4. mvn test            执行 test 代码
+        运行test-classes 下的 文件
+    5. mvn package         对编译后的代码进行打包
+        将编译好的文件打包到 jar 文件中。
+    6. mvn install         将打包后的资源文件部署到本地仓库
+        将打包的文件部署到本地仓库
+    7. mvn deploy          将打包后的资源文件部署到远程仓库
+    
+    
+site LifeCycle： 分为4个阶段：
+    maven站点，项目资源文件和描述文件都放在一个站点之下，其他用户可以通过访问我们的站点对我们的资源进行访问
+    开源项目都会有自己的站点，说明项目的 资源和 API 使用方法。
+    1. mvn pre-site 
+        对工程进行扫描
+    2. mvn site
+        下载插件，生成 site 相关文件，html描述文件等等,
+    3. mvn post-site
+        后续文件        
+    4. mvn site-deploy， 站点部署，qunar不用，感兴趣访问：
+                http://blog.csdn.net/cruise_h/article/details/17188399
+        
+        
+ 
+ 
             
             
