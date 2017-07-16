@@ -46,10 +46,10 @@ MavenStudy
     5. 在本地 repository 中安装 jar:  mvn install
     6. 在远程仓库中安装 jar ：         mvn deploy
     7. 清除产生的项目                 mvn clean 
-    8. 窥探 SuperPom                mvn help:effective-pom
+    8. 窥探 SuperPom                mvn help:effective-pom, 查看父POM文件
     9. maven 依赖树                  mvn dependency:tree
     10. 打包的时候过滤                mvn clean package -Pdev -Dmaven.test.skip=true
-                                        清除   打包并关联 Pdev环境  设置过滤
+                                        清除   打包并关联Pdev环境(??)  设置过滤
     11. mvn -U clean package -Pbetamagic 
             -Dmaven.test.skip=true
             -DcheckDeployRelease_skip=true
