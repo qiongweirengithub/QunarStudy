@@ -219,7 +219,31 @@ maven 仓库分类：
        引用过的 远程仓库 会下载到本地仓库， 成为本地仓库
     
     
+Maven 依赖管理：
+    1. 依赖管理结构：
+        <dependencies>
+            <dependency>
+                <groupid>
+                <artifaceid>
+                <version>
+
+                <type>                 ->     依赖类型， 构建中的packaing ,默认为JAR
+                <scope>                ->     依赖范围 
+                <optional>             ->      依赖是否可选
+                <exclusions>           ->      排除传递依赖
+    2. scope：
+        1. compile   ->  编译依赖范围， 默认值
+        2. test      ->  测试依赖范围
+        3. provided  ->  以提供依赖范围，打包的时候不需要使用，目标容器或者JDK已经准备好了
+        4. runtime   ->  运行时依赖范围，动态载入的JAR包，编译时不使用。
+        
+    3. 传递依赖是什么：
+        跟字面意思一样
     
+    4. 解决依赖冲突， 依赖不同版本的 JAR
+        1. 短路经优先
+        2. 
+        
     
 
 
