@@ -176,12 +176,18 @@ Pom 文件的介绍
         <dependency>
     
  
-    <profiles>                 ................配置管理，环境配置，重点..............
-        <profile>
+    <profiles>                 
+        <profile>                  
+            <id>                       .................配置管理，环境配置，重点............
+            <build>                    ................profile build .......................
             
-    <build>                    ................重点.......................
-        <finalName>            
-        <plugin>
+    
+     <build>                    ................project build 重点.......................
+         <defaultGoal>install</defaultGoal>         执行build任务时，如果没有指定目标，将使用的默认值，如：在命令行中执行mvn，则相当于执行mvn install
+         <directory>                                build目标文件的存放目录，默认在${basedir}/target目录；
+         <finalName>                                build目标文件的文件名，默认情况下为${artifactId}-${version}；         
+         <plugin>                                   所有的编译，打包，测试 都是插件支持的
+    
  
 
 仓库是什么：
