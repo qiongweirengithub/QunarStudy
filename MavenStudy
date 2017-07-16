@@ -11,3 +11,63 @@ MavenStudy
     4.2 POM 项目对象模型， 对象化
 
 
+
+手动创建 maven 项目
+    1. 创建目录结构
+    2. 创建POM 文件
+    3. 创建测试代码
+    4. 使用maven命令测试
+目录结构：
+    1. pom 文件
+    2. src 文件夹
+        1. main 文件夹
+            1. java文件夹
+            2. resource 文件夹
+        2. test 文件夹
+            1. java
+            2. resources
+
+测试maven项目 的指令：
+    maven  test 
+清理编译生成的目录或者文件 指令
+    maven clean
+
+手动创建maven项目
+    根据文件结构一次创建相应的文件
+
+
+使用 maven archetype:generate 创建项目
+
+常用命令：
+    1. 编译源代码  mvn compile
+    2. 编译测试代码  mvn test-compile
+    3. 运行测试     mvn test
+    4. 打包        mvn package
+    5. 在本地 repository 中安装 jar:  mvn install
+    6. 在远程仓库中安装 jar ：         mvn deploy
+    7. 清除产生的项目                 mvn clean 
+    8. 
+    
+    
+maven test 完成的任务：
+    1. 编译源代码
+    2. 编译测试代码
+    3. 运行测试代码
+     
+    
+maven test-compile 完成的任务：
+    1. 编译源代码
+    2. 编译测试代码
+
+maven package :
+    编译并打包工程，输出再 target 目录下。
+    生成的文件和文件夹有：
+        classes, maven-archiver, *.jar, surefire, surefire-report, test-classed .
+        
+maven install：
+    将 package 生成的 jar 包部署到本地，输出信息的关键词：  Installing    
+
+            
+            
+            
+            
