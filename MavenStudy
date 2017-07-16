@@ -164,6 +164,7 @@ Pom 文件的介绍
     
     <properties>
         <java-version>
+        <org.springframework.version>       //--------------依赖归类----------
         ...
         <profiles.dir>
     
@@ -241,22 +242,49 @@ Maven 依赖管理：
         跟字面意思一样
     
     4. 解决依赖冲突， 依赖不同版本的 JAR
-        1. 短路经优先
-        2. 
+        选择原则，但不解决冲突：
+            1. 短路经优先
+            2. 路径相同，谁先声明谁优先
+        解决冲突：
+            1. 使用dependencyManagement 设置选择版本，
+               在dependencies 里面不用指定版本号了
+            2. 使用 excusion, 不推荐使用。用来接触依赖多余。
         
     
+    5. 依赖归类
+        减少重复性工作， groupid 和 version 相同的情况下，就可以将其再properties里归类成一个常量。
+        
 
 
+maven 聚合与继承
+    1. 聚合：
+        1. 意义使用一个命令同时构建多个模块
+        2. 方法： 父pom中
+                <modules>
+                    <module>Project1</module>
+                    <module>Project2</module>
+                </modules>     
+                <packaging>pom</packaging>
+    2.  继承  
+        1. 子pom中
+            <parent>
+                <artifectid>
+                <groupid>
+                <version>
+            </parent>
 
-    
-    
+私服：
+    架设再局域网的一种特殊的远程仓库
+maven 测试：
+    1. 鼠标放到类文件里面
+    2. ctrl+shift+t
+    3. 选择测试类
+    4. 选择要测试的方法
  
  
  
- 
- 
- 
- 
+ 规范10 条
+    Maven plugin 插件声明???， 插件是什么意思
  
  
  
