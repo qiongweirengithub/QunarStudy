@@ -182,6 +182,62 @@ Pom 文件的介绍
         <finalName>            
         <plugin>
  
+
+仓库是什么：
+    1. 可以通过maven仓库 对本地和远程的 JAR 包进行管理，在POM中进行管理。使得依赖问题
+    更简单清晰的解决。
+    2. 在 Idea 中，已经设置了本地仓库的地址，见前面。
+仓库布局：
+    1. groupid, artifactId, version, artifactid-version.packaging  
+    2. 通过上述的 做点对 JAR 包进行定位。
+
+
+
+仓库版本：
+    1. snapshot   ->   version 添加了 -snapshot 则是指依赖的是 snapshot 版本
+    2. release    ->    未填加-snapshot, 
+    
+    
+maven 仓库分类：
+    1. 本地仓库
+        默认：    .m2/repository/
+        修改方式： 
+            1.  .m2/settings 文件中进行修改，添加 <localRepository>/home/maven_2016</localRepository>
+            2.  idea 中直接设置 
+         note: 新设置的本地仓库里面试没有内容的，运行 mvn package 后会将中央仓库的JAR下载到信设置的本地仓库。 
+    
+    2. 远程仓库
+        1. 中央仓库
+            maven 配置的默认配置文件在：
+            maven安装目录中的 /lib/maven-model-builder-versionNum.jar 中的
+            org/apache/maven/model/pom-vsrsionNUm.xml
+            在这个文件里标识了中央仓库的地址            
+        2. 私服
+        3. 其他公共远程仓库
+    
+    3. 依赖查找顺序: 本地仓库   ->   远程仓库
+       引用过的 远程仓库 会下载到本地仓库， 成为本地仓库
+    
+    
+    
+    
+
+
+
+    
+    
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
