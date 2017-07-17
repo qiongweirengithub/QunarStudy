@@ -36,7 +36,14 @@ git diff branch1 branch2   ->  两个分支上最新的提交做比较
  
  
 ssh 登录git：
- 
+    1. 产生公钥： ssh-keygen   ，一路回车，产生公匙文件       ->   无空格
+    2. cat 公匙文件， 复制公匙码
+    3. gitlab   ->   SSH KEYS   ->   ADD SSH KEY  ->  将公匙码复制进 key 栏中。
+    4. git push --set-upstream origin newBranchSSH                             ........设置远程的仓库地址
+    
+    执行下面的操作就不需要每次输入账户密码了。
+    5. git clone ssh-url
+    6. git push.
  
 git status :
     查看未追踪(未提交)的文件
