@@ -28,7 +28,7 @@ Git 三种状态：
   7. 合并特定分支到主干分支
   
 git diff          ->   工作区文件与暂存区文件的不同
-git diff staged   ->   暂存区文件与上次commit的文件(即本地仓库)的区别
+git diff --staged   ->   暂存区文件与上次commit的文件(即本地仓库)的区别
 git diff branch1 branch2   ->  两个分支上最新的提交做比较
 更多介绍：
   http://www.cnblogs.com/wish123/p/3963224.html
