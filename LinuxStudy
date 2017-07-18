@@ -86,7 +86,21 @@
         底行命令模式：
           :
           
-          
+  压缩与解压：
+  
+  
+linux 网络与系统学习：
+    curl: 模拟http请求，
+    http 请求的组成部分: 请求行，请求头，消息体
+      1. -X： 指定 request 的 method   ->    GET POST
+      2. -H: 请求的 header , 如 “content-type:application/json”
+      3. -d: 指定post请求的data,消息体
+      4. -b: 请求的cookie, 可以在 -H 中设置
+      5. -c: 输出响应的set-cookie的内容到文件
+      6. -i: 指定输出respond的header的内容
+      7. -w: 指定输出部分格式化的数据，如请求时间等
+      
+      
  
           
           
