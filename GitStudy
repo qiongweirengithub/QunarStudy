@@ -119,7 +119,7 @@ git checkout someBranch  ->  切换到某个branch
   修给了一个 工作区的文件(hello.py), 可以通过 git checkout --hello.py 将暂存区的文件拉回来。
   使用 checkout 还可以还原到某一个版本的某一个状态
     1. 查看 git log , 得到我们需要的版本号 hash 码。
-    2. git checkout <hashcode> hello.py
+    2. git checkout <hashcode> hello.py                         ->     工作区和暂存区的文件修改, 并且不会记录成 commit 操作。 
     3. git checkout HEAD hello.py   返回到最近的一次提交
     4. git checkout HEAD～2 hello.py   返回到最近的一次提交
     
