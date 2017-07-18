@@ -27,7 +27,7 @@ Git 三种状态：
   6. 切换到主干分支
   7. 合并特定分支到主干分支
   
-git diff          ->   工作区文件与暂存区文件的不同
+git diff          ->   工作区文件与暂存区文件的不同, 新创建的文件文件不经过 git add 时，使用git diff 不会对比此文件。
 git diff --staged   ->   暂存区文件与上次commit的文件(即本地仓库)的区别
 git diff branch1 branch2   ->  两个分支上最新的提交做比较
 更多介绍：
@@ -36,12 +36,12 @@ git diff branch1 branch2   ->  两个分支上最新的提交做比较
  
  
 ssh 登录git：
-    1. 产生公钥： ssh-keygen   ，一路回车，产生公匙文件(/home/qunar-qw/.ssh/id_rsa)       ->   无空格
+    1. 产生公钥： ssh-keygen   ，一路回车，产生公匙文件(/home/qunar-qw/.ssh/id_rsa), github 也可以使用这个key.       ->   无空格
     2. cat 公匙文件， 复制公匙码
     3. gitlab   ->   SSH KEYS   ->   ADD SSH KEY  ->  将公匙码复制进 key 栏中。
     4. git push --set-upstream origin newBranchSSH                             ........设置远程的仓库地址
     
-    执行下面的操作就不需要每次输入账户密码了。
+    执行下面的操作就不需要每次输入账户密码了。必须试从 SSH-url clone 的工程才能使用SSH KEY
     5. git clone ssh-url
     6. git push.
  
