@@ -27,3 +27,77 @@
   4. which
       当前使用的可执行文件的位置
       
+权限管理：
+  user -> gid,uid
+  -rw-rw-r-- 1 qunar-qw qunar-qw  859  7月 17 10:07 README.md
+  [u] [g] [a]   owner   owerGroup
+
+  chown someuser:somegroup filename
+  chgrp 
+  chmod 777 filename -R 
+
+
+文件查看：
+  cat filename   -> 查看文件所有内容，
+  head -7 filename  -> 查看文件的前几行
+  tail -6 filename  -> 查看文件的后几行
+  tail -f filename  -> 文件不断写入新的内容，会将文件的内容写出来。
+  less filename     -> 分页查看文件内容
+      1. shift+g  -> 跳最后
+      2. g        -> 跳到最前
+      3. 200g     -> 跳到200行
+      4. /keyword -> 搜索关键字，n->下一个匹配，shift+n  -> 上一个匹配
+      5. ctrl+u   -> 向上翻页
+      6. ctrl+d   -> 向下翻页
+      7.  grep keyword filename  -> 查看包含关键字的行
+          grep "regexp" filename  ->  正则表达式匹配
+          grep --color==auto "regexp" filename
+          
+      8. sort   ->  文件整行排序 
+          -k  根据指定的列进行排
+          -n  内容为数字排序
+          -r  倒序排列
+      9. uniq
+          输出相同的行(相同的行必须相邻)及其次数，与sort配合使用。
+      
+      sort filename | uniq -c| sort -k 1,-n -r -t " "| head
+      
+      10. wc filename    ->  行数，单词数
+          wc -c filename   -> 只看字节数
+          wc -l filemame   -> 只看行数
+      
+      11. awk    ->  有点复杂，自学。
+      12. sed    ->   stream editor
+      
+      vim:
+        命令模式：
+          1. G -> end
+          2. gg -> 开头
+          3. /keyword  ->  匹配
+              1. n  ->  往下找匹配
+              2. N  ->  往上找匹配
+          4. dd  ->  剪切光标所在行
+              u   ->  撤销操作
+              dw  ->  剪切一个单词
+              p   -> 粘贴
+              
+        编辑模式：  命令模式下输入 i， 退出边界模式： esc
+        
+        底行命令模式：
+          :
+          
+          
+ 
+          
+          
+           
+          
+      
+  
+  
+  
+  
+   
+  
+  
+  
