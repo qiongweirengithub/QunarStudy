@@ -93,12 +93,64 @@ linux 网络与系统学习：
     curl: 模拟http请求，
     http 请求的组成部分: 请求行，请求头，消息体
       1. -X： 指定 request 的 method   ->    GET POST
-      2. -H: 请求的 header , 如 “content-type:application/json”
+      2. -H: 请求的 header , 如 “content-type:application/json”， 可以在此处指定cookie
       3. -d: 指定post请求的data,消息体
-      4. -b: 请求的cookie, 可以在 -H 中设置
+                    
+      4. -b: 使用cookie，指定cookie文件, 也可以在 -H 中设置
       5. -c: 输出响应的set-cookie的内容到文件
       6. -i: 指定输出respond的header的内容
       7. -w: 指定输出部分格式化的数据，如请求时间等
+          curl -w %{varible_name} url-add
+          man curl   ->   查找 -w 相关内容可查看可选的 varible_name
+      
+      wget: curl 的子集，一般用于下载文件  
+      
+      
+      网络工具：
+        网络发包工具：
+          1. ping :
+              ping -c 3 -W 1 www.baidu.com 指定 ping 次数 
+          2. hostname | host 
+              1. hostname 获取本机的主机名
+              2. host ipadd   -> 根据ip 获取主机名
+          3. nc :
+            nc -t www.baidu.com 80   ->   tcp 数据包
+              GET / HTTP/1.0
+            nc -u ipadd              ->  udp 数据包
+            nc -l ipadd port         ->  监听 某一 ip 端口
+
+          4. telnet
+
+          5. netstat -an     ->   a: all,  n:以ip形式输出
+
+        网络抓包工具：
+          1. tcpdump
+            sudo tcpdump -vvv host histname and tcp reslt.txt
+          
+远程命令：
+  ssh:
+    
+  scp: 远程拷贝
+    scp username@ipadd/somefold/filename ./
+    
+    
+ linux 系统命令：
+    1. ps -ef  查看进程
+          UID     PID    PPID     C              STIME     TTY     TIME    CMD
+          用户id  进程id 父进程id   cpu当前占用率   启动时间   虚拟终端  占用时间 启用的指令
+
+    2. ps -Lf pid  查看线程 
+          UID       PID  PPID   LWP    C  NLWP       STIME   TTY  STAT   TIME CMD
+                                线程号     进程包含线程数             状态
+    3. free
+    4. top 
+          查看系统使用情况，类似任务管理器
+
+    5. kill 发射信号给进程
+        kill 9 pid 发信好关闭指定进程，无条件关闭
+        kill -l 查看可选参数
+        
+        
       
       
  
