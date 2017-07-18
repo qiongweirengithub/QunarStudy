@@ -1,0 +1,29 @@
+1. 免费
+
+2. 开源
+
+3. 适合大规模服务器管理
+
+4. 发行版：
+  1 debian, ubuntu
+  2. redhat, fedora ,centos
+  
+5. 包管理
+  1. apt, yum/dnf, yast, .....
+  
+6. 帮助
+  1. man
+  2. info
+7. 
+  1. ls -lsrt (l, s:排序，r:反向排列，t: 按时间排序)
+  
+  2. find:
+      可以按照时间，类型，名称进行查找。后可以接其他的命令，管道。。
+      1. find somedir -name "*.xml"
+      2. find somedir -mtime +3 -type -f
+                      修改时间    文件类型 文件
+  3. whereis 
+      查找可执行文件的存放位置
+  4. which
+      当前使用的可执行文件的位置
+      
