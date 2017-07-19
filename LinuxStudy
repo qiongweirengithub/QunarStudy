@@ -156,9 +156,35 @@ linux 网络与系统学习：
 shell 脚本编程
     
       
+      
+      
+      
+      
+      
+      
+      
+      
+课堂学习
+    wget 的使用：
+      1. 结合用户和密码，从远程的服务器上下载 日志文件，
  
-          
-          
+    scp username@ipadd/somefold/filename ./
+      1. 下载 日志
+      
+      2. netstat | awk '{print $5}' | sort | uniq -c   查看网络状态
+      3. free -m;
+         free -h;
+      4. kill - 默认 -15;
+      
+     find ./MyCode/ShellCommand/ -size +1k -type f
+     find ./MyCode/ShellCommand/ -size +1k -type f | xargs -i{} cp {}  ./
+     
+     
+     
+     
+     
+      
+      
            
           
       
