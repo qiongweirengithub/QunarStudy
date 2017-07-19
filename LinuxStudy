@@ -179,9 +179,28 @@ shell 脚本编程
      find ./MyCode/ShellCommand/ -size +1k -type f
      find ./MyCode/ShellCommand/ -size +1k -type f | xargs -i{} cp {}  ./
      
+     下线web服务：
+        查看服务是否在线：
+          cat -f *.log 文件，
+        rm filename      -.  
+          
+     服务上线：
+        start
+        查看是否启动成功
+        把文件复制进去
+     
+     线上服务 load 飙升，如何定位
+        1. 查看线程占用资源  top， 包括内存，cpu,等等
+        2. top -H -p 7308   ->  产看 7308 下的线程
+        3. 查看线程堆栈信息？？ 指令是什么
+             jstat -heap threadID
+             jstat -p  pid 
+        4. 工具 tools/devbin 下的工具，
      
      
      
+     发布时如何查看线上多台机器的日志
+        
      
       
       
