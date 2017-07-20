@@ -1,0 +1,142 @@
+java 平台平台： java 语言，JVM ，类库。
+java 源代码， 字节码， JVM解释执行
+一次编码，多处执行
+
+不同与c++
+  1. 内存管理
+  2. 反射
+  3. 完全的面向对象
+学习重点：
+  Git
+  Maven
+    项目管理工具， 类是与 make 工具
+  Shell , vim , emacs
+  web 开发
+    Servlet规范
+    HTTP 协议
+  第三方类库：
+    Guava, Apache Commons
+  公司使用的框架：
+    Spring,
+    Mysql, PostgreSql, Mybais(ORM)
+    Dubbo(系统通信,运维方便)
+    日志： Slf4j+logback
+  QMQ：
+    消息队列，中间件
+  Qscahedule
+    任务调度中心
+  Qconfig
+    统一配置中心
+
+
+基础数据类型：
+  String , StringBuild 的源码，
+  8 数据类型
+从下面几个方面介绍 数据类型
+  box & unbox 
+  interger 中的缓存
+  数值比较和溢出问题
+  NPE 问题 null point error
+  溢出：
+    long millisOfYear = 5000 * 3000 * 44 * 123 ;  -> 溢出 
+    long millisOfYear = 5000L * 3000 * 44 * 123 ;  -> 正常
+  NPE：
+    Interger a=null;
+    Interger a=a.Intvalue(); -> 错误
+  精度的丢失：  
+    println(new BigDecimal(0.58))   ->    0.579999
+    
+    正确的构造方式：
+       BigDecimal a = new BigDecimal.valueof(0.580);   ->  回去掉最后的 0
+       BigDecimal b = new BigDecimal("0.580")
+       数值比较：
+        a.equals(b)   ->  false
+        a.compareTo(b)  ->  true
+        指定算法精度：
+          a.divide(b, MathContent.DECIMAL64);
+          
+  StringBuilder
+      StringBuilder append：
+          StringBuild 与 StringBuffer 继承 AbstratStringBuilder ,
+                                      impliments java.io.Serializable;
+                                      StringBuffer 中 包含 syschronized,多线程安全
+                                      StringBuilder 没有加锁，效率更高。
+          
+      StringBuilder 扩容 ：
+          在 append 调用自动扩容的代码，函数在AbstratStringBuilder 中的 ensureCapacityInternal();
+          
+      String guava 提供
+          String.isNllorEmpty()
+          String.nullToeEpty()
+          commomSuffix(a,b);
+          commomPreffix(a,b);
+          String.paddStart(a, 5, '*');
+          String.paddEnd(a, 5, '*');
+     Ints:  guava 提供
+        补充Interger 和 Arrays  中对 int 类型的操作;
+        常用方法：
+          Ints.compare(a,b);
+          asList;
+          Ints.contains(arrayA,1);
+          max; min;
+          
+          JDK:
+            Arrays.asList();  ->  返回 List, 元素是数组List<int []>。。
+          guavas:
+            Ints.asList();    ->  返回List, 元素是 List<Int>, 不可变！！！， 没有add方法
+      Joiner: guava 提供
+          List<Integer> a=List.newArrayList(1,2,5);
+          logger.info("join result {}", Joiner.on("|").join(a));  - >  a 中不能有null
+          logger.info("join result {}", Joiner.on("|").skipNull().join(a));  - >  a 中有null
+          logger.info("join result {}", Joiner.on("|").useForNull("7").join(a));  - >  a 中有null
+          
+          使用Joiner 链接一个 Map 
+            Map<String, String> para = Maps.newHashMap();
+            para.put("name", "qiongweiren");
+            para.put("id", "0");
+            String queryString = Joiner.on("&").withKeyValueSeparator("=").join(para);
+            
+       Splitter: guava 提供
+          用于将字符串按照某个 separator 分割成List 或者 Map; Immutable/ThreadSafe
+          Splitter 和 MapSplitter 的基本用法;
+          String string = ", a ,b ,";
+          String regexSplit = string.split(",")                                ->    输出是[, a ,b ]
+          List<String> guavaSplit =   Splitter.on(",").splitToList(string)   ->    输出是[, a ,b ,]
+          List<String> guavaSplit =   Splitter.on(",").trimResult().splitToList(string)   ->    输出是[,a,b,]
+          List<String> guavaSplit =   Splitter.on(",").trimResult().omitEmptyString().splitToList(string)   ->    输出是[a,b]
+          
+          String querystring = "a=1&b=2";
+          Map<Srring, String> split = Splitter.on("&").withKeyVauleSeparator("=").split(queryString);
+          
+      Objects:guava 提供
+          操作 Object 的辅助类
+              equls:
+                  JDK ：
+                    String a = null;
+                    String b = null;
+                    a.equals(b)      ->  a 为 null 时 会抛出错误，b 没影响。
+                  guava:
+                    Objects.equal(a,b) -> 不会 
+              hashCode
+                  Object.hashCode(1,2);
+              toStringHelper
+              firstNonNull
+              
+   
+          
+        
+          
+          
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
