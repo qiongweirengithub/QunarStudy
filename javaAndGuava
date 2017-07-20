@@ -123,10 +123,78 @@ java 源代码， 字节码， JVM解释执行
               firstNonNull
               
    
-          
         
+       CharMatcher: guava提供
+          CharMatcher charmatcher = CharMatcher.anyOf("abcd"); ->  'a', 'b','c','d';
+          String newstr  = charmatcher.reomovefrom(str);
+          String newstr  = charmatcher.retainfrom(str);
+          CharMatcher charmatcher = CharMatcher.anyOf("abcd").or(CharMatcher.is('2'));
           
+          Splitter.on(",").trimResult(CharMatcher.is('a')).splitToList(str)
+
+        Optional:
+            1. 作为方法的返回值，
+              1. String process();
+              2. Optional<String> process();   ->  调用方明确知道返回值可能不存在
+                    return a>0 ? Optional.<String>absent() :  Optional.of("xxx");
+                    result.isPresent();
+            2. 作为默认值的设置
+              Integer a = Optional.fromNullable(b).or(0);
+            
+
+        Fucntion: guava 
+            Function 定义的函数 ->  接受一个输入参数，转换为另一个结果。
+              Function<Interger,String> iotoString = new Function<Interger, String>()
+              {
+                Public String apply(Interger input)
+                {}
+              }
+              
+              String x = iotoString.apply(5);     ->    
+              
+            Predicate 定义的函数 p_func ->  判断参数是否满足一定的条件, 
+              Predicate<Interger> greaterThan5 = new Predicate<Interger>(){
+                 public boolean apply(Interger input)              
+              }
+              
+              out.println(greaterThan5(10));
+              
+              
+      String 的 intern 
+      String 的 Interners  ????
+      
+      
+ Joda-Time
+      见工程测试代码
+ 
+ 异常处理：
+    如何处理程序中出现的错误或者异常
+    1. 返回值方式处理异常
+    2. 异常机制
+        1. Throwable
+          1.1 Error     ->  不用catch 这种
+          1.2 Exception
+            1.2.1 RuntimeException    ->    非受检查异常，可以不catch.
+            1.2.x ...                 ->  受检查异常 -> catch 或者 throws声明
+    
+    3. 异常方法：
+        1. Exception.getMessage
+        2. Exception.getCause
+        3. Exception.printStackTrace  -->  不奥要执行这句
+        4. Exception.getStackTrace , 需要统计堆栈数据
+    4. 异常处理：
+        捕获异常：
+          try{}catch(){}finally{}
           
+    5. guavas 异常处理：
+        工具类：Throwables:
+            getCausalChain  ->  异常链
+            getRootCause    -> 得到最原始的异常，最早的Throw点
+            propagate       ->  将 Exception 包装成 RuntimeException  或则和error,简化异常处理
+            getStackTraceAsString
+  
+    
+            
     
   
   
