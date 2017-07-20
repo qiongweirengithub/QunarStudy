@@ -1,0 +1,25 @@
+异常被吞; util.log("err",e)
+\n :  换行符号 等等，要根据系统变量来编码 
+
+try  catch  finally
+
+Comparable 使用不同的排序方式
+Comparator
+
+
+time 记录格式应该保持原有形式，需要指向专用操作的时候再转变形式。
+
+
+System.out 的缺点： 
+    out.println 流程; 
+      1. syschronized(this);      ->>     多线程下同步会造成输出阻塞，造成性能下降。
+      2. print();
+      3. newline();
+    替换为日志输出方式。
+      Util.log("");
+
+缓存与缓冲：
+      
+
+
+
