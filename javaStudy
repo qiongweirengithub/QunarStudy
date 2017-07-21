@@ -48,6 +48,50 @@ Util类 不应该实例化， 一般是一些静态方法，可以通过声明�
     
 
 
+静态内部类：
+    类内部的逻辑是否需要外界访问，
+guava中很多类采用工厂方法新建对象
+    屏蔽了实现细节，简化构造的流程
+
+WeakReference<Integer> weak = new WeakReference<Integer>(100);    ->>   1000
+System.gc();
+Thread.sleep(1000L);
+out.println(weak.get());
+
+
+领读部分代码：
+    Joiner , Optional, HashMap, 
+    HashMap: 
+        扩容如何实现，扩容对性能的影响
+    guava:
+        
+    优秀框架：
+        spring IOC 存储代码
+        guava 代码
+        jdk 并发原发实现
+        lockback 日志框架
+        apache commends 库
+        PC部 : 
+   
+Map: 遍历方法：
+    entry set;
+    key set;
+    value set;
+    
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+
+
 
 
 
