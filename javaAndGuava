@@ -247,7 +247,7 @@ java 源代码， 字节码， JVM解释执行
     继承于 collection  ->  定义接口
         list  ->   定义接口
           arraylist   ->  实现
-          linklist    ->  
+          linklist    ->  实现
         set     -->  定义接口
           hashset 
           lindedset
@@ -259,11 +259,188 @@ java 源代码， 字节码， JVM解释执行
       treemap
     
     
+    List 扩容 ->   1.5 倍
+    for(String x:strngList)
+    {
+      stringList.add("x")       ->   exceptuion
+    }
+    
+    for(Iterator<String> iter=StringList.iterator;)
+    {
+      StringList.add("xx")        -》  succed.
+    }
+    
+    
+    jdk Collections
+      emptyList/emptySet/emptyMap   >  创建 空对象
+      singleton/singletonList     ->   创建的对象不可写
+      binarySearch(ListObj)
+      shuffle(ListObj)              ->  打乱
       
-            
+      sort(list, new comparator<>(){
+        @overwrite
+        public int compare(o1, o2)
+        {return o1.pro>o2.pro}
+      })
+      
+      
+      Ordering.natural().reverse()      ->    guava
+        1.      Collection..sort(list, Ordering.natural().reverse())
+        2.      list = Ordering.natural().reverse().sortedCopy(List)
+        3.      Collection..sort(list, Ordering.natural().reverse().onResultOf(
+                                                                                new Function<typein,typeout>
+                                                                                {
+                                                                                  @Nullable
+                                                                                  @Overwrite
+                                                                                  public Integer apply(@Nullable String input)
+                                                                                    {
+                                                                                      return input.length;
+                                                                                    }      
+                                                                                }
+                                                                                ) 
+                                )
+    hashMap:
+        1. Capcity  default 16
+        2. load Factor   default 0.75
+        3. 避免扩容：
+           guava: Map.newHashMapWithExpectedSize()
     
+    LinkedHashMap:    extend HashMap
+       增加：
+        1. table  ->   HashMAP
+        2. accessOrder  
+            false: 非顺序访问
+            true:  顺序访问
+        3. header ->  增加的指针，after,before,next, value    
+        
+    TreeMap:  
+        1. 用红黑树来实现的，会定义一个 comparetor
     
+    EnumMap:
+   
+   
+    Map 是非线程安全的
+        put: 会改变 Map 大小
+        read: 会判断大小是否变化，变化话抛出异常
+    线程安全的：    
+            1. Collection 提供了一个  SynchroizedMap  ,初始化会传入 mutex, 所有操作都会对其进行加锁，效率会较少
+                Map<String, Integer> synchronizedmap = Collections.synchronizedMap(new HashMap<String, Integer>());
+                
+            2. ConcurrentHashMap  -> 对hashmap 拆成很多的块， 对块进行加锁
+                Map<String, Integer> concurrentHashMap = new ConcurrentHashMap<String, Integer>();
+                
+                
+     Set      
+      1. 基于hashMap:
+          HashSet
+          LinkedSet
+          TreeSet
+        
+        EnumSet 创建:根据输入的大小创建下面两种： 按 bit 存储
+            元素个数<64:返回
+              RegularEnumSet
+            元素个数>64：返回
+              JumboEnumSet
+        
+  JDK 容器与guava容器
+  JDK容器：
+    常用容器：ArrayList, LinkedList, HashSet, HashMap
+      无法提供某种场景需求，
+            Map 1-1, 不能1-n. 
+            Key->value ,无法 value->key, 
+            UnmodifiableXX 问题
+            用法繁琐
             
+   guava :
+      工厂方法：
+        List.newArrayList();  ->  空Arraylist
+        List.newArrayListWithCapacity(int)
+
+      asList/asSet/asMap     ->  返回的是 视图， 原容器变化回影响这些方法返回的容器内容
+      常用工具类：
+        集合操作：
+          List.reverse/transform/partion
+          Sets.filter(setInt, 
+                      new Predicate<Integer>(){
+                        @overwrite
+                        public boolean apply(@Nullable Integer input)
+                                  {return input>2;}
+                      }          
+          )
+          
+          Sets.intersection/union/difference/powerSet/cartesianProduct
+          
+          Maps.filterKeys/filterValues/filterEntries
+          Maps.transformValues/transformEntries
+          Maps.difference
+          Maps.fromProperties  ->  从Properties文件中构造一个 不可修改 Map
+          Maps.uniqueIndex(Iterable, Function)  ->  以某一属性未index,构造一个Map,例如
+                                                    从数据库中读取一批数据，数据的
+                                                    某一个有唯一索引的列建立MAP
+                                                    
+          
+          迭代器：
+            遍历容器 或者 改变容器 内容的接口
+            
+            
+            
+         guava 新容器：
+            MultiSet   ->>   允许出现不同的元素，且不存在顺序，？？介于set与list之间
+            MultiMap    ->   
+                Multimap<String, String> multimap = HashMultimap.create();
+                multimap.put("a","a_value1");
+                multimap.put("a","a_value2");
+                multimap.put("a","a_value3");    ->  有 “a_value1, a_value2, a_value3”
+
+                HashMap<String ,String> singleMap = new HashMap<String, String>();
+                singleMap.put("a","a_value1");
+                singleMap.put("a","a_value2");
+                singleMap.put("a","a_value3");  ->   只有 “a_value3”
+
+
+
+              ImmutableXXX 不可变的容器
+                  1. Collections.unmodifiableList 
+                      返回的是 原来容器的视图，
+                      通过这个视图是无法修改 原容器内容的，
+                      不代表原容器不可修改,
+                      原容器的修改会影响到得到的视图。？？？ 与原容器内容的修改的区别。。。。add 会变， 任何对原容器修改都会变
+                      
+                  2. guava 提供的 immutableXXX
+                      1. 返回的容器(视图)不可修改
+                      2. 原容器的修改不会影响 视图的内容 ，原容器内容修改会影响返回的容器内容，add 不会变 ，但是对原先的元素修改会影响
+                      3. 线程安全
+                      4. 对不可靠的客户代码库来说，它很安全，可以在未受信任的
+                          类库中安全的使用这些对象。
+                          
+                      5. 节省内存和时间开销
+                      6. 可以被使用未一个常量，并且再未来也保持不变
+                      7. 原理：
+                          1. 返回原容器，而不是原容器的视图
+                          2. add 或者 set 直接抛出异常
+                          
+                    
+              BiMap
+                1. jdk key->vakue,不能根据value->key
+                2. BiMap ->  互相查询
+                    BiMap.get              ->     key  -> value
+                    BiMap.reverse().get    ->     value -> key
+                    
+             
+              RangeSet/RangeMap
+                
+                RangeSet<Interger> rangeset = TreeRangeSet.create();
+                rangeset.add(Range.closed(1,10));
+                
+                RangeMap<Interger, String> rangmap = TreeRangeSet.create();
+                rangmap.put(Range.closed(0,10), "abc");
+
+              AtomicLongMap
+                任意类型的Key 到 长整形数 之间的映射，
+                
+                  
+            
+      
     
   
   
