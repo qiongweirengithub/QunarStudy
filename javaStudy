@@ -79,10 +79,46 @@ Map: 遍历方法：
     value set;
     
 
+
+
+java file.java       ->    file.class
+javap - verbose file    ->     
+
+
+中文乱码问题：
+      指定博客：  http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
         
-        
-        
-        
+   
+
+obj = Class.forname()    //----------------利用反射获得的类。
+method.invoke(obj, dateFormat.parse(value));
+
+Map<Class, property> classMap = new weakMap()
+
+xml解析
+    ：SAXParse;
+    : Dom 
+    
+接口，类，抽象，注入，反射，
+
+
+第二期：5-10, 20 作业题目
+
+
+根据 行为 针对的内容 确定 方法是否应为 static
+    购物车内部计算和 订单添加和删除 
+访问修饰符：
+    private,  protect, public,
+
+远程资源的读取：
+    异步：读取资源的类型
+    同步：阻塞读取
+guava 异步编程:
+    filter， listen ,
+
+
+
+
         
         
         
