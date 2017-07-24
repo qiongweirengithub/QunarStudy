@@ -191,8 +191,77 @@ java 源代码， 字节码， JVM解释执行
             getCausalChain  ->  异常链
             getRootCause    -> 得到最原始的异常，最早的Throw点
             propagate       ->  将 Exception 包装成 RuntimeException  或则和error,简化异常处理
-            getStackTraceAsString
+            getStackTraceAsString    ->   以String 的方式返回错误的信息
+            
+    
+日志：
+    slf4j  
+            面向接口，只提供日志系统的接口
+            实现层 调用原生实现接口 或者通过适配层调用其他其他日志库的方法来实现
+            能适配多种不同的日志框架，实现日志的统一配置和管理
+    lockback:
+            slf4j 接口的原生实现，非通过适配层
+            logback: Logger, Appender, Layout
+              1. LOgger         -> 产生日志事件，可配置级别
+              2. Appender       ->  将日志事件代理到具体的日志记录组建
+                    1. DBAppender ->  日志事件记录到数据库
+                    2. FileAppender    ->  日志事件记录到文件中
+                    3. RollingFIlAppender -> 将日志按照一定的策略进行分割存储
+                    
+              Layout             ->    将日志时间格式化为具体的日志记录：
+                    1. HTMLLayout    ->  输出为HTML
+                    2. PattrernLayout   ->  根据配置的Pattern 格式化日志事件
+                    
+     日志级别：
+          trace,< debug< info< warn< error
+          
+          配置级别的方法：
+            <logger name="hotel.order.log" level="debug">   ->  包名
+                  <append-ref ref="file" />
+            </logger>
+              
+     使用占位符代替字符串拼接
+     
+      Logger.error("error occurred reason{}. stack{}", e.getMessenge(), e);   
+            ->  错误，最后 e 是Throwable,所有 Throwable 会在占位父判断完之后进行输出。不能够放到占位符里面
+            
+代码规范：
+  类名： 形容词或者 形容词
+  方法名 ： 动词
+  使用恰当的词标识方法背后的动作
   
+  接口：
+    通信协议，意义要明确
+    职责单一，接口数据的组合尽量放到调用方完成
+    接口实现需要严格的遵循接口规范,尽量不要做隐形约定(默认值)
+    返回容器的地方不要返回null, 返回空的容器
+    RPC接口返回java原生容器，不免使用第三方库提供的容器
+  注释：
+    javadoc 格式编写的注释
+    接口的注释，参数，返回值，调用频率限制，使用说明
+    
+ 
+ 
+ Jdk collentions:
+ 
+    继承于 collection  ->  定义接口
+        list  ->   定义接口
+          arraylist   ->  实现
+          linklist    ->  
+        set     -->  定义接口
+          hashset 
+          lindedset
+          treeset
+          
+    map:      ->   定义接口
+      haskmap
+      linedmap
+      treemap
+    
+    
+      
+            
+    
     
             
     
