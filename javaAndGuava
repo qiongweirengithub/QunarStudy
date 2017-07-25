@@ -438,10 +438,90 @@ java 源代码， 字节码， JVM解释执行
               AtomicLongMap
                 任意类型的Key 到 长整形数 之间的映射，
                 
-                  
+      Guava 缓存：
+          1. 数据库的访问请求过多造成数据库的压力过大
+          2. 读取分库
+          3. 加入中间的缓存
+          4. 实例：搜索缓存，2. DNS 缓存， Mysql 内部的缓存
+          5. 如何设计一个组件实现代码中对数据的缓存
+            1. 数据结构
+                常用 hash 表，get put
+            2. 容量
+            3. 有效期
+            4. 清理策略
+                 LRU/FOFO/LFU
+            5. 缓存统计相关指标
+           
+          6. guava 缓存，
+             1. 缓存的结构类似于 concurrentMAP 支持高并发，没有性能担心，但是不会自动移除过期的内容
+             2. guava Cache 容器， 使用简答，线程安全，可以自动加载，定时更新，LRU 清理, key/value支持多种引用类型，缓存移除监听。
+                2. LoadingCache<String, testObj> LoadingCache = CacheBuild.newBuild()
+                              .maximumSize(1000)
+                              .expireAfterAccess(30, IimeUnit.MIMUTES)
+                              .refreshAfterWrite(10, TimeUnit.MIMUTES)
+                              .removalListener(
+                                    new RemovalListener<String, testObj>(){}
+                              )
+                              .build(
+                                    new CacheLoader<String, testobj>(){           //缓存刷新方法
+                                        @Override
+                                        public tetsObj load(String key) throws Exception
+                                        {return fetchFromDB(key)}
+                                    }
+                               )
+                          LoadingCache.get(key);
+                          LoadingCache.put(key, testObj)
+                          
+             3. 并没有放到文件中，应用重启缓存丢失，不能持久化，受内存限制，缓存不一致等缺点，
+      Redis:
+        K/V NoSQL
+        数据在内存
+        支持多种数据结构
+        可持久化
+        高性能，高可靠
+        支持主从复制， 事务。
+        可以通过公司提供的 jar 包操作 Ridis
+ 
+ IO:
+  java IO
+      1. 基于流的输入输出方式
+        1. 按顺序，不能跳
+      2. input
+        1. 字节流 inputStream
+        2. 字符流 inputReader
+      3. output
+        1. 字节流 outputStream
+        2. 字符流 outputputWrite        
+  guavan IO
+      1. 更高抽象
+      2. 更方便的工具类
+      3. 
+        ByteStream  ->  字节流
+        CharStream  ->  字符流
+            File file = new File(path)
+            //----------------------------不用循环直接读取所有内容-----------
+            List<String> lines = CharStream.readLines(new FileReader(file));
+            //?? ---------------------------依然需要关闭流???流在哪里？
+        Files 
+            //---------------------------不用捕获异常-----------------
+            List<String> lines = Files.readLines(new FileReader(file), endingType);
             
-      
-    
+        Resources
+            //---------------------------不许补货异常----------------------
+            List<String> lines = Resources.readLines(url, endingType);
+        
+        源 于 汇：
+            1. 对File, Url, byte[]  抽象为一类数据
+            2. ByteSource, CharSource  ->  读取
+                Files.asCharSource(new file, encoding);
+                Resources.asCharSource(new file, encoding);
+            3. ByteSink, CharSink      ->  输出
+            
+            
+            
+        
+        
+  
   
   
   
