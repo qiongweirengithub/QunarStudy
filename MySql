@@ -1,0 +1,198 @@
+查看数据库
+  show databases
+创建数据库：
+  mysqladmin -u root -p create RUNOOB
+选择数据库
+  select databasename
+查看数据库中的数据表
+  show tables
+选择数据库
+  use RUNOOB;
+创建数据表：
+  CREATE TABLE table_name (column_name column_type);
+
+1. 查询：
+
+    1.SELECT:
+        use test                                ->  test 是一个数据库
+        select * from t1                        ->  t1 是 test 数据库下的一个表 table( id ,name, addr)
+        seletc name from test where id=5        ->  查询记录中 id=5 的条目，返回其中 name 字段，
+        
+        内连接
+          select * from t1,t2 where t1.id=t2.id  
+          select * from t1 join t2 on t1.id=t2.id 
+          select * from t1 join t2 on t1.id=t2.id where name="bob"
+        外链接：
+          select * from product
+          select * from product_detail
+          select * from product a join product_detail b on a.id=b.id   -> 符合的列出来， 别名， 内连接，列出所有字段，
+          select * from product a left join product_detail b on a.id=b.id   ->  外链接， 列出所有a的条目，其他字段null补充
+          
+     2. insert
+         INSERT INTO table_name ( field1, field2,...fieldN )
+                       VALUES
+                       ( value1, value2,...valueN );
+         1. insert into t1(id,naem,add) values(200,"css",222),(201,"css1",2212)
+     3. updata
+         UPDATE table_name SET field1={expr1|DEFAULT}[, field2={new-value2}]...
+         [WHERE where_condition]
+         updata t1 set name="lss" where id=11;
+      4. delete
+         DELETE FROM table_name [WHERE Clause]
+         delete from t1 where id<10 and id>5
+          
+   DDL:  ->  语句不可回滚，原子操作
+      1. CREATE
+        1. create table t4(id int, names, varchar10)
+        2. show create table t4
+      2. drop           ->    删除表,不可以回滚
+        1.  drop table [if exists] tablename
+      3. truncat                    ->     删除表数据，全表数据全部清空，不可回滚
+        1. truncate table t52
+      4. rename
+          1. rename table t2 t52
+      5. alter   -> 属性修改,不可回滚
+         1. add
+            show table t52\G
+            alter table t52 add column city varchar(50)
+         2. modify/change
+            alter table t52 modify column city varchar(30)
+            alter table t52 modify column city varchar(30), add city2 varchar(5);
+         3. drop
+             alter table t52 drop column city
+             
+            
+         
+         
+         
+   MySQL 体系架构
+       1.  单进程，多线程
+       2.  存储引擎
+          MyiSAM   和 InnoDB, 每种引擎对于 内存限制，事务机制的支持，锁机制，
+       3. 存储引擎特性见链接
+          http://www.cnblogs.com/microcat/p/6600860.html
+          MyiSAM  ->  速度快，但是功能少
+       4. show engins
+       5. create table table32(id int) engine=innodb
+          create table table32(id int) engine=myisam
+          ps -ef | grep mysql  ->    查看存储路径，进入存储目录查看相应文件
+          
+     MySQL 字段类型
+       int
+          1. int 
+            tinyint, smallint, mediumint, int, bigint
+          2. decimal
+            包含整数数据和小数数据
+            crate table t23(id1 decimal(5,2))
+          3. float, double
+          
+          
+        char:
+          1. char/varchar
+            固定字节与变化字节
+          2. text
+            varchar 一种，存储更多，无法设置默认值
+          3. blob
+            二进制存储，无法设置默认值
+       
+          
+        Date
+          1. date  ->  
+             '1000-01-01' '9999-12-31'
+          2. datetime
+              '1000-01-01 00:00:00' '9999-12-31 23:59:59'
+          3. timestamp
+      
+      
+      权限管理：
+        1. 权限验证
+          1. 读取权限表
+          2. 对连接用户尽心验证
+          3. 权限验证顺序
+            1. user表 权限       ->   mysql.user  文件
+                  select * from mysql.user where user="lisi"\G
+            2. db 表权限         ->    mysql.db    文件
+            3. table_ori表 权限
+            4. colum 表 权限
+
+        2. 场景
+          1. 创建用户：
+              1. create user 'username'@'ip' IDENTIFIED BY'mypasswd'
+              2. create user 'username'@'%' IDENTIIFIED BY'passwd'  -> 任何IP
+              3. GRAND ALL PRIVIEGES ON *.* 'username'@'ip' IDENTIFIED BY'passwd'
+          2.  删除用户
+              1. DROP USER 'username'@'ip'
+              2. GRANT 给用户授权
+                  grant insert, update,delete,select on test1.* to 'username'@'ip' 
+                  grant all privileges on *.* to 'username'@'ip' with grant option;
+              3. REVOKE insert ON test1.* FROM 'username'@'ip'
+
+        3. 权限安全
+
+       查看帮助：
+          help;
+          help create table;
+
+          show tables like '%re%'
+          show create table table2; ->   显示表休息的具体配置(列。。)信息
+          show index from table2\G      ->  查看表的索引,G显示方式
+          show grants for 'username'@'ip'\G
+
+          show session varaibles like '%char%'   ->  当前会话的变量值
+          show global variables like '%c%'       ->  全局值
+
+          show session status like 'com_insert'   -> 状态值
+          show global status like 'com_insert'   -> 状态值
+
+          show full pricesslist\G        ->   查看链接用户以及执行SQL
+
+      SET 命令
+          set session charcter_set_client='utf8'
+          set global char_set='utf8'
+          set global readonly=on
+          set names utf8mb4         ->     防止乱码
+
+
+
+Mastert-slave 原理
+    异步复制实现是通过下面得日志协同完成的：
+        Binlog ，开发执行的SQL语句按照 提交的先后 顺序在Mysql内部生成日志。
+        binlog 可以用作数据回滚及异步复制时使用
+        
+        RelayLog 通过异步复制MAster中的Binlog ，生成Slave的执行日志。
+        Relaylog 按照提交顺序生成日志
+
+    Binglog 存储格式
+        1. row 
+        2. statement
+        3. mixed
+    主从复制原理：
+        主库：
+          1.binlog dump thread
+              从库连接，发送 binlog event 并 持有lock， 发送完(IO thread 读到后释放lock)
+        2. 从库： 
+          1. IO thread  ->   从主库读取 binlog ,并生成 relaylog
+          2. SQL thread   ->   读取relaylog 并执行
+          
+         半同步：
+          主库的 binlog 分发完毕，等待从库 relaylog 的 ack 信息，最后才 commit.
+          
+     GTIO:
+        全局事务 IO ，？？？？不懂
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          
