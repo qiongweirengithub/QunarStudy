@@ -181,6 +181,40 @@ Mastert-slave 原理
         全局事务 IO ，？？？？不懂
         
       
+   库表：
+      命名范例：
+        create table 'pay_nitice' (
+           'id' bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+           'merchantCode' varchar(20) NOT NULL DEFAULT 'pay' COMMENT '商户Code',
+           'amount' decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '通知余额',
+           'status' tinyint(1) NOT NULL DEFAULT '0' COMMENT '商户通知状态',
+           'creatDate' datetime NOT NULL COMMENT '产生对款通知时间',
+           .....
+           'create_time' timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '第一次通知时间'
+           PRIMARY KEY('id'),
+           UNIQUE KEY 'uniq_merchantCode' ('merchantCode'),
+           KEY 'idx_createDate' (createDate)
+         )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='支付通知表'
+      
+      基础规范：
+        innodb 作为存储引擎， 业务部相关自增Id 作为主键
+        字符集： utf8/utf8MB4
+        表，字段都需要添加注释，标点符号用英文
+        禁止图片文件等大数据
+        表数据量 5000W 以内
+        禁止线上数据库压力测试
+        禁止测试，开发环境直连数据库
+      索引规范
+        单张表 索引数量不超过 5
+        单个索引中 字段树 不超过5
+        索引名全部小写
+        非唯一索引命名： idx_字段名称[_字段名称]
+        唯一索引命名 ： uniq_字段名
+        组合索引采用包含所有字段名 idx_
+        必须有主键，使用 UNSIGNED自增作 为主键
+        
+        1. 
+        
       
       
       
