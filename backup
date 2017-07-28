@@ -55,14 +55,16 @@
     select count(*) from author_table where author_name like '王%';
 
   2. 查询获奖作者总人数
-    select count(distinct author_table.author_id) from author_table join cup_table on author_table.author_id=cup_table.author_id; 
+    select count(distinct author_table.author_id) from author_table 
+          join cup_table on author_table.author_id=cup_table.author_id; 
 
   3. 查询同时获得过金奖、银奖的作者姓名
-    select count(*) from author_table join cup_table on author_table.author_id=cup_table.author_id where cup_table.cup_type='金奖' or cup_table.cup='银奖' group by author_table.author_id;
+    select distinct author_name from cup_table A join author_table B on A.author_id=B.author_id
+	        join cup_table C on B.author_id=C.author_id where A.cup_type='金' and C.cup_type='银';
 
   4. 查询获得过金奖的图书有多少本，银奖的有多少本
-    select count(*) from cup_table where cup_type='金奖';
-    select count(*) from cup_table where cup_type='银奖';
+    select count(*) from cup_table where cup_type='金';
+    select count(*) from cup_table where cup_type='银';
   5. 查询最近一年内获过奖的作者姓名
     select author_name from author_table autb join cup_table cutb on 
         autb.author_id=cutb.author_id 
