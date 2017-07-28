@@ -1,0 +1,122 @@
+# 作业链接:http://wiki.corp.qunar.com/confluence/pages/viewpage.action?pageId=167045966
+#一、设计表，写出建表语句
+
+  //创建测试数据库
+  create database home_work_mysql;
+  use home_work_mysql;
+  
+  // 创建图书表
+  create table book_table(
+    id bigint AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    book_id bigint NOT NULL DEFAULT 0 COMMENT '书籍索引',
+    author_id bigint NOT NULL DEFAULT 0 COMMENT '作者id',
+    book_name varchar(40) NOT NULL DEFAULT 'null' COMMENT '书籍名称',
+    pages int NOT NULL DEFAULT 0 COMMENT '书籍页数',
+    price Decimal(6,2) NOT NULL DEFAULT 0.00 COMMENT '书籍价格',
+    press varchar(50) NOT NULL DEFAULT 'null' COMMENT '书籍出版社'
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='书籍表';
+
+
+  //  创建奖项表
+  create table cup_table(
+    id bigint AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    book_id bigint NOT NULL DEFAULT 0 COMMENT '书籍索引',
+    author_id bigint NOT NULL DEFAULT 0 COMMENT '作者id',
+    cup_type varchar(10) NOT NULL DEFAULT 'null' COMMENT '奖项类型',
+    cup_time datetime NOT NULL COMMENT '获奖日期'
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖项表';
+
+  //  创建作者表
+  create table author_table(
+    id bigint AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    author_id bigint NOT NULL DEFAULT 0 COMMENT '作者id',
+    author_name varchar(10) NOT NULL DEFAULT 'NULL' COMMENT '作者姓名',
+    content text NOT NULL
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='作者表';
+
+
+// 2. 设计索引语句
+
+  //  根据 price 和 book_name 创建索引， book_name 和 book_id 创建索引
+  alter table book_table add index idx_book_table_price_bookname (price,book_name),
+    add unique idx_book_table_name_id (book_name,book_id); 
+
+  // 创建作者表索引：
+  alter table author_table add index idx_author_table_name_id(author_name, author_id);
+
+  // 创建 获奖书籍 索引  和 获奖作者索引
+  alter table cup_table add index idx_cup_table_cuptype_book_id(cup_type, book_id), 
+  add index idx_cup_table_cuptype_authorid(cup_type, book_id);
+
+
+三、完成以下SQL
+
+  1. 查询姓王的作者有多少
+    select count(*) from author_table where author_name like '王%';
+
+  2. 查询获奖作者总人数
+    select count(distinct author_table.author_id) from author_table join cup_table on author_table.author_id=cup_table.author_id where  cup_table.cup_type='金奖' or cup_table.cup='银奖'; 
+
+  3. 查询同时获得过金奖、银奖的作者姓名
+    select count(*) from author_table join cup_table on author_table.author_id=cup_table.author_id where cup_table.cup_type='金奖' or cup_table.cup='银奖' group by ahthor_table.author_id;
+
+  4. 查询获得过金奖的图书有多少本，银奖的有多少本
+    select count(*) from cup_table where cup_type='金奖';
+    select count(*) from cup_table where cup_type='银奖';
+  5. 查询最近一年内获过奖的作者姓名
+    select author_name from author_table autb join cup_table cutb on autb.author_id=cutb.author_id where cubt.cup_time>date_sub(curdate(),interval 1 year) and cutb.cup_type='金奖' or cutb.cup='银奖' group by autb.author_id;
+  考察点：对连接查询的掌握，对函数索引的概念理解
+  对简化语句、分拆语句的理解
+
+
+
+  四、
+  1. 如何查看表的结构信息？如何查看索引选择性？
+    答：
+      1. show create table table_name; 
+      2. 假如 SQL 中有 数据表 city_table(city varchar(n))
+         我们可以通过下面的代码测试 索引 city 的选择性：
+        select count(distinct left(city,3))/count(*) as sel3,
+          count(distinct left(city,4))/count(*) as sel4,
+          count(distinct left(city,5))/count(*) as sel5, 
+          count(distinct left(city,6))/count(*) as sel6 
+        from city_demo;	
+         计算 city 字段作为索引时，前缀长度对索引选择性的影响，可以得出器选择性。
+
+
+  2. 联合索引中的字段顺序应该如何设计？
+    答：
+      1. 组合索引的第一个字段必须出现在查询组句中，这个索引才会被用到。
+      2. 在创建多列索引时，where子句中使用最频繁的一列放在最左边。
+      3. 选择性越高字段越往前放，可以根据 explain 查询索引需要遍历的数据行数。
+
+  3. 以下查询应如何创建索引？
+    select * from tb1 where name='zww' order by create_time desc limit 10;
+    select * from tb1 where create_time between '2016-08-01 0:00:00' and '2016-08-31 23:59:59';
+    答：
+      1. CREATE INDEX idx_tb1_name_create_time ON tb1 (name, create_time);
+      2. 对于where后面的字段，范围条件不应该添加索引
+
+
+  4. int(10)和varchar(10)两个字段的(10)有什么区别？
+    答：
+      int(10)并不改变数据存储所占的空间，只改变此字段的显示方式
+      varchar(10) 代表的是变量存储所占的存储空间。
+
+  5. 在utf8字符集和utf8mb4字符集下，varchar(50)分别能存储多少字符？
+  创建索引时，字符串长度分别为多少，才能成功创建完整索引（而不是前缀索引）
+    答：
+      1. utf8可以存方 50个字符， utf8mb4 可以存储 50 个字符
+      2. InnoDB单列索引长度不能超过767bytes,utf8 对应的字符串长度为767/3=255个字符，utf8md4对应的字符串长度为767/4=191个字符。
+
+  6. 以下查询如何创建索引能够实现覆盖索引优化？(请给出具体SQL)
+  select invalid_time_flag from pushtoken_android_62 
+  where uid = 'AC54E24E-FB73-3981-C4BC-CED8D69407F8' 
+  and pid = '10010'
+  select count(*) from pushtoken_android_62 
+  where uid = 'AC54E24E-FB73-3981-C4BC-CED8D69407F8' 
+  and pid = '10010'
+    答：
+      CREATE INDEX id_invalid_time_flag_uid_pid ON pushtoken_android_62(invalid_time_flag, uid, pid);
+
+
