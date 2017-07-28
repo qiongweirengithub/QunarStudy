@@ -55,7 +55,7 @@
     select count(*) from author_table where author_name like '王%';
 
   2. 查询获奖作者总人数
-    select count(distinct author_table.author_id) from author_table join cup_table on author_table.author_id=cup_table.author_id where  cup_table.cup_type='金奖' or cup_table.cup='银奖'; 
+    select count(distinct author_table.author_id) from author_table join cup_table on author_table.author_id=cup_table.author_id; 
 
   3. 查询同时获得过金奖、银奖的作者姓名
     select count(*) from author_table join cup_table on author_table.author_id=cup_table.author_id where cup_table.cup_type='金奖' or cup_table.cup='银奖' group by author_table.author_id;
@@ -66,11 +66,8 @@
   5. 查询最近一年内获过奖的作者姓名
     select author_name from author_table autb join cup_table cutb on 
         autb.author_id=cutb.author_id 
-            where cutb.cup_time>date_sub(curdate(),interval 1 year) and cutb.cup_type='金奖' or cutb.cup='银奖' group by autb.author_id;
-  考察点：对连接查询的掌握，对函数索引的概念理解
-  对简化语句、分拆语句的理解
-
-
+            where cutb.cup_time>date_sub(curdate(),interval 1 year) group by autb.author_id;
+  
 
   四、
   1. 如何查看表的结构信息？如何查看索引选择性？
