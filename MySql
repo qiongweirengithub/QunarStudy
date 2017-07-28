@@ -326,9 +326,56 @@ Mastert-slave 原理
                 
                 
                 
-                
-                
-                
+双模糊查询是无法使用索引的。
+
+全表扫，无法使用索引
+               
+被驱动(join ..tablename)的一定要建立索引
+
+nestloopjoin : 小表驱动大表, 与查找循环有关
+
+select id,naem,address,phone_no,sex,salary from table_a where name='xiaoming' order by id
+        create index idx_name on table_1(name)
+
+联合索引：
+  有range的字段 不要做联合索引
+  orderby groupby 的字段放到联合索引的后面
+  where 中字段顺序与建立索引的顺序无关， 按照区分度建立索引
+
+  联合索引有序？？与冗余索引？？
+
+
+选择联合索引还是覆盖索引
+-->   考虑内存， 字段不多，内存不大，count *
+      select 字段过多，不用覆盖索引
+      索引长度
+      text ,blob 存在，不能做覆盖索引。
+
+
+覆盖索引：
+   对 where ,select , orderby, groupby, 
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
                 
                 
