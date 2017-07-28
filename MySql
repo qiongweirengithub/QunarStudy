@@ -216,17 +216,121 @@ Mastert-slave 原理
         1. 
         
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+      库表设计：
+          大字段，访问频率低的字段拆分到单独的表中存储，实现冷热分离;
+          主键用整数类型，并且字段名称用id,使用AUTO——INCREMENT数据类，并指定UNSIGNED
+      分表策略：
+          HASH 进行散列表， 表名字的后缀使用十进制，数字从0开始。
+          按日期分表 符合 YYY[MM][DD][HH]  ->  user_2017092314
+          分库分表策略：->   ?
+          
+          禁止使用分区表。。？
+      字段选择：
+          UNSIGNED 存储非负数值
+          INT UNSIGNED IPV4
+          所有字段均定义为 NOT NULL
+          用 DECIMAL 代替 FLOAT DOUBLE 
+      尽量不使用text,blob
       
           
+  索引：
+      索引作用：
+        是指把你设置为索引的字段A的内容储存在一个独立区间S里，
+        里面只有这个字段的内容。在找查这个与这个字段A的内容时会直接从这个独立区间里查找，
+        而不是去到数据表里查找。找到的这些符合条件的字段后再读取字段A所指向真实的数据记录的物理地址，
+        再把对应的数据内容输出。 如果你查找的不是索引的字段那么他会从数据表里面查找。因为数据表有很多不相关的字段，
+        数据库程序是不会省略不查找。要判断那些不相关的字段以及多次在记录中跳转是花费一定的资源的。 
+        当然不是设置越多索引就越好。因为索引都放到这个独立区间S，独立区间S越大搜索所占的资源就越大。
+        如果你只有一个字段为索引，那么你搜索这个字段是非常快速的。
+      
+  
+      判断语句类型   ---  定位数据  ------ 增删改查
+      索引： 存储引擎快速定位数据的一种数据结构。
+            用来优化数据访问，保持数据完整性
+      B+TREE ：
+            叶子节点包含所有数据
+            内节点中包含部分叶子节点的键值
+            复杂度稳定
+            所有节点都是按照键值大小顺序当道同一层叶子节点，由叶子节点指针进行链接。
+       
+   索引类型：
+      1. 聚集索引(主键索引)
+          叶子节点包含(主键列值， 事务ID， 回滚指针， 非主键列值)
+      2. 复制索引(辅助索引)
+          叶子节点包含(索引列值， 对应的聚集索引主键列值)
+                        
+      3. 数据定位：
+          索引搜索：
+          聚集索引:   ->  直接再 clustered B+TREE 上定位
+          辅助索引:   ->  再 secondary B+TREE 上查询主键
+                         然后用主键在 clustered B+TREE 上定位 
+           
+          单列索引:
+                  单个字段组成， where 条件中的字段查询可以应用到索引
+                  alter table product add index idx_orderno(orderno)
+          联合索引：
+                  多个字段组成
+                  alter table prodecu add index idx_orderno_createtime(orderno,createtime)
+                  1. 整体是有序的，
+          使用联合索引：
+                  idx_order_no_createtime(order, create_time)   ->    顺序查，查不到前面的，就不会继续查后面的
+                  1. select * from a1_test where create_time='' and order_no=''   ->  使用
+                  2. select * from a1_test where create_time=''  ->  未使用,create_time  在联合索引第二个
+                  3. select * from a_test where order_no in ('','') orderby create_time desc , 会用到，order_no在 联合索引第一个
+      
+          覆盖索引：
+              索引包含多有的要查寻的字段的值，成为覆盖索引  ？ 
+          
+          什么情况用不到索引：
+              where 中没有内容：
+              否定条件： <> , not in, not exists
+              join 中选择的字段不一致
+              扫描超过了 全表的20%
+              where 存在函数运算
+              like '%some%'
+              出现隐士字符类型转化
+          sql优化:
+              explain 功能使用
+                  打印执行计划：
+                    1. id ；2. select_type; 3. table; 4. 扫描方式；5.possible_keys; 6.key; 7.key_len; 8.row(扫描行数)
+                    9. extra(using ..)
+              mysql 正确使用索引
+                   1.  
+                     1. select count(column) form tb1
+                     2. select count(*) from tb1            ->     这个更好
+                   2. 将select * 转换为 具体字段 ，提高查询效率(可能会用到索引)
+                   3. 链接查询的join字段需要添加索引(on 两面的字段)
+                   4. where 条件的顺序与索引使用无关
+                   5. 避免冗余索引
+                   6. 避免更新 索引 列值！！！是索引的列值
+                   7. 选择性高的 字段加索引
+                   8. 能覆盖索引就覆盖索引
+                      判断  ->   select 条件， where 条件， groupby 条件 的并集
+                   9. orderby 中的字段尽量放到索引中
+                   
+              避免 badsql
+                    1. select / update /delete 全表或者范围较大的时候,改成分段做，一定要有索引可走
+                    2. 避免子查询，子查询不能走搜因
+                    3. 不要使用函数，
+                    4. 避免 like
+      
+    案例分析：
+      避免 select *
+      避免出现大事务 ：容易造成死锁
+          事务：
+                事务能保证你做的一系列动作，要么全部成功。
+                如果有一个操作失败，就回退到修改前。
+
+          事务 不可以 夹杂RPC，重点
+         
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
