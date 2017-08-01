@@ -218,9 +218,27 @@ guava 异步编程:
                     http://blog.csdn.net/mnmlist/article/details/53870520  ->   坑详解
 
 
-
-
-
+范型编程：
+        1. 范型 接口
+            1. 定义
+                public interface tmpInterface2<I,O> {
+                        O run(I input);
+                    }
+            2. 实现
+                public class InstanceClass implements tmpInterface1<String,Integer> {
+                        @Override
+                        public Integer run(String input) {
+                            return null;
+                        }
+                    }         
+        2. 范型方法：
+            1. 定义方式：
+                public static  <I,O> O out(I t) {
+                    System.out.println(t);
+                    return (O)"OK";
+                    }
+            2. 调用：
+                String x = this.out("xx")
 
 
 
