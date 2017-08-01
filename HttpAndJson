@@ -1,0 +1,27 @@
+http://user"pass@www.example.jp:80/dir/index.html?id=1#ch1
+
+保留字符集：
+  % ？ 等等 ->  需要进行转意
+  
+http 报文：
+  request, response
+  报文：
+    start line;
+    header;
+    (data)body
+    
+    
+    
+
+cache:
+    与缓存相关的 HTTP 消息头;
+    1.  Expires
+    2.  Cache-Control
+    3. last-Modified
+    4. Etag
+    5. Date
+    6. if-Modified:(request)
+    7. if-none-matche:资源检验值（request）
+    
+
+
