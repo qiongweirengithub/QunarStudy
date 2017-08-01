@@ -159,7 +159,63 @@ guava 异步编程:
           5. 链接 http://yuxingxing1988.iteye.com/blog/1605748
         
 
+源码解析
+    public static <F, T> List<T> transform(List<F> fromList, Function<? super F, ? extends T> function) {
+            return (List)(fromList instanceof RandomAccess?new Lists.TransformingRandomAccessList(fromList, function):new Lists.TransformingSequentialList(fromList, function));
+    }
+        1. static -> 静态函数 
+        1. <F,T>  ->  代表两个范型
+        2. List<T>  ->  返回类型
+        3. transfrom   ->  函数名
+        4. List<F> fromList   ->  输入 list<F>
+        5. Function<? super F, ? extends T> function   
+            ->   Function ,  俩个参数，super F, extend T
+        6. fromList instanceof RandomAccess   ->  判断 fromlist 的特性，调用相应的类进行初始化
+        7. lazy  ->  懒执行方式 
+    
 
+        8.public T get(int index) {
+            return this.function.apply(this.fromList.get(index));
+        }
+        9. //   懒执行方式：初始化只是对 类中的变量进行赋值， 再迭代的时候才进行转换 
+        private static class TransformingRandomAccessList<F, T> extends AbstractList<T> implements RandomAccess, Serializable {
+                final List<F> fromList;
+                final Function<? super F, ? extends T> function;
+                private static final long serialVersionUID = 0L;
+
+                //  初始化只 赋值，变量赋值， 处理器赋值。
+                TransformingRandomAccessList(List<F> fromList, Function<? super F, ? extends T> function) {
+                    this.fromList = (List)Preconditions.checkNotNull(fromList);
+                    this.function = (Function)Preconditions.checkNotNull(function);
+                }
+
+                public void clear() {
+                    this.fromList.clear();
+                }
+
+                public T get(int index) {
+                    return this.function.apply(this.fromList.get(index));
+                }
+
+                public Iterator<T> iterator() {
+                    return this.listIterator();
+                }
+
+                //  进行迭代时才进行元素值的转换
+                public ListIterator<T> listIterator(int index) {
+                    return new TransformedListIterator(this.fromList.listIterator(index)) {
+                        T transform(F from) {
+                            return TransformingRandomAccessList.this.function.apply(from);
+                        }
+                    };
+                }
+                ...}
+           9. 调用：lazy 方式试异步转换。！！！！！！！！！！有坑。
+                List<Interger> inputListInt;
+                Function<Interger, String> funcI2S = new Function(){}
+                List<String> xx = Lists.transform(inputListInt, funcI2S)
+           10. 注意问题：
+                    http://blog.csdn.net/mnmlist/article/details/53870520  ->   坑详解
 
 
 
