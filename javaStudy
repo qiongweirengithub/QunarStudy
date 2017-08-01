@@ -119,10 +119,44 @@ guava 异步编程:
 
 内部类
     
+范型接口, 范型类 的使用
 
+注解：
+    不管多高端，就是一个注释，
+    java 默认注解，这些注解都是可以查看源码的：
+          @Override:只能用在方法之上的，用来告诉别人这一个方法是改写父类的。
+          @Deprecated:建议别人不要使用旧的API的时候用的,编译的时候会用产生警告信息,可以设定在程序里的所有的元素上.
+          @SuppressWarnings:这一个类型可以来暂时把一些警告信息消息关闭.
+    
+    java 自定义注解：
+          1. 通过@interface关键字声明注解名称，以及注解的成员属性或者叫做注解的参数。    
+          2. 使用java内置的四个元注解对这个自定义标注的功能和范围进行一些限制， 元注解：@Target,@Retention,@Documented,@Inherited 
+                @Target 表示该注解用于什么地方，可能的 ElemenetType 参数包括
+                @Retention 表示在什么级别保存该注解信息。
+                @Documented 将此注解包含在 javadoc 中 
+                @Inherited 允许子类继承父类中的注解 
+          3. 实例：
+                   @Target(ElementType.TYPE)//这个标注应用于类
+                   @Retention(RetentionPolicy.RUNTIME)//标注会一直保留到运行时
+                   @Documented//将此注解包含在javadoc中
+                   public @interface Description {           // 我们自定义的注解，包含一个 string 
+                       String value();
+                   } 
+                   
+                   @Target(ElementType.METHOD)
+                   @Retention(RetentionPolicy.RUNTIME)
+                   @Documented
+                   public @interface Name {                  // 我们自定义的注解，包含两个 string 
+                       String originate();
+                       String community();
+                   }
+          4.  代码中使用注解：
+                @Description(value="javaeye,做最棒的软件开发交流社区")  ->  注解赋值
+                @Name(originate="创始人:robbin",community="javaEye")  ->  注解赋值
+                Description des = (Description)test.getAnnotation(Description.class);     ->  获取对类实例 test 的 Description 的注解 
+                System.out.println("描述:"+des.value());
         
-        
-        
+          5. 链接 http://yuxingxing1988.iteye.com/blog/1605748
         
 
 
