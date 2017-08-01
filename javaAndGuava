@@ -164,6 +164,15 @@ java 源代码， 字节码， JVM解释执行
       String 的 Interners  ????
       
       
+      
+      Lists  ->  guava 提供
+      我们还可以将两个（或三个）类型相同的数据存放在一个list中，这样可以传入到只有一个参数的函数或者需要减少参数的函数中，这些函数如下：
+      List<E> x = Lists.asList(@Nullable E first, E[] rest)
+        Lists.asList(@Nullable E first, @Nullable E second, E[] rest)
+      
+      
+      
+      
  Joda-Time
       见工程测试代码
  
