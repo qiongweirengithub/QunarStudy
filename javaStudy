@@ -218,7 +218,7 @@ guava 异步编程:
                     http://blog.csdn.net/mnmlist/article/details/53870520  ->   坑详解
 
 
-范型编程：
+范型编程：  http://blog.csdn.net/huojiao2006/article/details/53996392
         1. 范型 接口
             1. 定义
                 public interface tmpInterface2<I,O> {
