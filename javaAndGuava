@@ -515,6 +515,72 @@ java 源代码， 字节码， JVM解释执行
             //---------------------------不用捕获异常-----------------
             List<String> lines = Files.readLines(new FileReader(file), endingType);
             
+            public static List<String> readLines(File file, Charset charset)
+                throws IOException {
+              // don't use asCharSource(file, charset).readLines() because that returns
+              // an immutable list, which would change the behavior of this method
+              return readLines(file, charset, new LineProcessor<List<String>>() {
+                final List<String> result = Lists.newArrayList();
+                @Override
+                public boolean processLine(String line) {
+                  result.add(line);
+                  return true;
+                }
+                @Override
+                public List<String> getResult() {
+                  return result;
+                }
+              });
+            }
+            
+            
+            
+            最终的原始接口：
+              public static <T> T readLines(File file, Charset charset,
+                  LineProcessor<T> callback) throws IOException {
+                return asCharSource(file, charset).readLines(callback);
+              }
+              
+              asCharSource   -.>  返回charstream对象
+              charstream 对象调用 .readLines(callback)
+              
+              public static <T> T readLines(
+                  Readable readable, LineProcessor<T> processor) throws IOException {
+                checkNotNull(readable);
+                checkNotNull(processor);
+
+                LineReader lineReader = new LineReader(readable);
+                String line;
+                while ((line = lineReader.readLine()) != null) {
+                  if (!processor.processLine(line)) {
+                    break;
+                  }
+                }
+                return processor.getResult();
+              }
+              
+              
+              //  处理器接口函数，需覆盖其中的函数
+              public interface LineProcessor<T> {
+                    /**
+                     * This method will be called once for each line.
+                     *
+                     * @param line the line read from the input, without delimiter
+                     * @return true to continue processing, false to stop
+                     */
+                    boolean processLine(String line) throws IOException;
+
+                    /** Return the result of processing all the lines. */
+                    T getResult();
+                  }
+              
+              
+              
+              
+              
+              
+            
+            
         Resources
             //---------------------------不许补货异常----------------------
             List<String> lines = Resources.readLines(url, endingType);
