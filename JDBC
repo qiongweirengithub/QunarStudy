@@ -1,0 +1,52 @@
+1. driver 接口， driverManage 和 驱动器之间的桥梁
+       
+2. driverManager 建立数据库链接， 管理数据库 
+
+3 Connection:是类
+    1. getMetaData
+    2. createStatement
+    3. prepareStatement
+4. Statement
+    1. boolean execute(String sql)
+    2. int exeuteUpdata(String sql)  ->  返回影响行数
+    3. ResultSet executeQuery(String sql) ; 执行select语句
+5. prepareStatement  ->  继承与 Statemetn
+    1. 不是每次都编译
+    2. sql 参数化   SELECT  FROM user WHERE name = ?   -> ? 占位符
+        实例：
+          String sql = "SELECT * FROM user WHERE user_name = ?"
+          PrearedStatement Statement = conn.prepareStatement(sql);
+          statement.setString("test")    // -> 占位符替换
+          ResultSet resultSet = statement.executeQuery();
+          
+    3. 防止sql注入问题
+    
+ResultSet
+    getXXX();
+    
+    
+    
+    
+ JDBC 使用：
+        1. 加载驱动器类
+        2. 建立与数据库的链接
+        3. 创建 statement 对象
+        4. 执行sql语句
+        5. 访问 ResultSet 的记录
+        6. 关闭 ResultSet, Statement, Connection对象，顺序关闭
+        
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
