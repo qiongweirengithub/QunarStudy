@@ -1,0 +1,19 @@
+工程结构：
+    
+    
+    
+web.xml
+  <web-app>
+      <display-name> Achetype Create Web Application </display-name>
+      
+      //  设置 welcome 网页
+      <welcome-file-list>
+          <welcome-file> index.html </welcom-file>
+      </welcome-file-list>
+  </web-app>
+  
+工程 pom.xml
+    添加依赖：
+        
+
+
