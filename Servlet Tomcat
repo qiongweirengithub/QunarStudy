@@ -14,6 +14,203 @@ web.xml
   
 工程 pom.xml
     添加依赖：
+    
+
+servlet :
+    *<code>javax.servlet.GenericServlet</code> or an HTTP servlet that
+    *extends <code>javax.servlet.http.HttpServlet</code>.
+    
+    ->  HttpServlet ->  
+         * Provides an abstract class to be subclassed to create
+         * an HTTP servlet suitable for a Web site. A subclass of
+         * <code>HttpServlet</code> must override at least 
+         * one method, usually one of these:
+         *
+         * <ul>
+         * <li> <code>doGet</code>, if the servlet supports HTTP GET requests
+         * <li> <code>doPost</code>, for HTTP POST requests
+         * <li> <code>doPut</code>, for HTTP PUT requests
+         * <li> <code>doDelete</code>, for HTTP DELETE requests
+         * <li> <code>init</code> and <code>destroy</code>, 
+         * to manage resources that are held for the life of the servlet
+         * <li> <code>getServletInfo</code>, which the servlet uses to
+         * provide information about itself 
+         * </ul>
+
+
+
+
+listener:
+        实现一个或者多个 Servlet 事件监听器接口的类，在部署web应用时实例化并注册到web容器中。
+        级别：
+            应用级：public interface ServletContextListener extends EventListener{}
+                    服务启动时调用
+            请求级：public interface ServletRequestListener extends EventListener {}
+                    收到请求时调用
+            会话级：public interface HttpSessionListener extends EventListener {}
+                    
+        实例：
+            public class ConutListener implements ServletRequestListener {
+                    @Override public void requestDestroyed(ServletRequestEvent sre) {
+                        ViewCounter.incremet();
+                    }
+                    @Override public void requestInitialized(ServletRequestEvent sre) {
+
+                    }
+                }
+             注册：
+             <listener>
+                <listener-class>com.qunar.fresh2017.ConutListener</listener-class>
+            </listener>
+            
+            
+  Filter :
+        改变进入的 请求和返回的响应 的 header和内容的 java 组建
         
+        <filter>
+        <filter-name>countFIlter</filter-name>
+        <filter-class>com.qunar.fresh2017.CountFIlter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>countFIlter</filter-name>
+            <url-pattern>/zero</url-pattern>
+        </filter-mapping>
+        
+        <!-- servlet 服务映射 -->
+        <servlet>
+            <servlet-name>zero</servlet-name>
+            <servlet-class>com.qunar.fresh2017.ZeroServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>zero</servlet-name>
+            <url-pattern>/zero</url-pattern>
+        </servlet-mapping>
+        
+        
+        --->    对  /zero 的访问顺序：  CountFIlter.doFilter();
+                                      ->  ZeroServlet.doGet();
+        
+  加载过程：
+        context-param   ->  listener  ->  filter  ->  servlet
+        context-param -> 键值对 
+        listener      ->  web.xml 顺序
+        filter:       ->  按照 urlparttern,同一pattern 按照 web.xml 顺序加载
+        servlet       ->  
+                1. <Load on start up>int值</>  值越小越先加载
+                2. servlet服务同一时间只存在一个
+                3. servlet 并发需要自己控制
+ 路径映射，转发与重定向
+        1.  url-pattern 
+                1. 全路径  /abc/ddd
+                2. 路径映射 /aa/*
+                3. *.  
+                4. 默认：  /
+        2. 匹配顺序：
+                1. 精准路径
+                2. 最长路径匹配
+                3. 扩展匹配
+                4. default
+
+
+        3. 实例：
+            protected   void doGet(HttpServletRequest request, HttpServletResponse response){
+                try {
+                    //  转发
+                    request.getRequestDispatcher("/b.html").forward(request,response);
+                    // 重定向
+                    response.sendRedirect("/b.html");
+                    //response.sendRedirect("www.baidu.com");
+                    response.getWriter().write("hello:" + ViewCounter.getCount());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+
+
+cookie ：
+        public class LoginServlet extends HttpServlet {
+                @Override
+                protected   void doGet(HttpServletRequest request, HttpServletResponse response) {
+                    String userName = request.getParameter("userName");
+                    Cookie cookie = new Cookie("userName", userName);
+
+                    cookie.setMaxAge(1000);  // 保存时间，负数的化浏览器关闭 cookie 就没了
+                    // 通过response传回给客户机，客户机保存在浏览器端
+                    response.addCookie(cookie);
+
+                }
+            }
+
+        // 读取请求中的 cookie 文件并返回
+        Cookie[] cookies = req.getCookies();
+        if(cookies!=null){
+            for(Cookie c:cookies) {
+                if (c.getName().equals("userName"))
+                    resp.getWriter().write(c.getValue());
+            }
+        }
+
+
+
+    http关于流关闭的注意事项：
+            例如：
+                resp.getWriter().write(c.getValue());
+                关闭拥有 resp 来处理， 不应该试由我们关闭
+    
+
+
+Tomcat:
+    web服务器， 基于servlet 规范， servlet 容器
+    免费，开放源代码的 web 应用服务器  
+    符合 servlet 规范的 servlet 容器
+    
+    <server>  // servlet 组件
+        <service>  // 一个server 可以包含多个 service
+            <connector>   //一个服务可以包含多个 connector, 多个connector 共享一个 engine
+                          // connector 实际处理用户请求
+                <engine>     // service 只包含一个engine
+                    <host>      // engine 可以包含多个host, 虚拟主机,包含多个外部应用
+                                    // host 包含多个 context, 一个context对应一个web应用
+                         <context> //  Servlet 由多个 context 组成。?????
+                                <wrapper>  // 对应一个 servlet  ???????
+
+    责任链模式完成容器的创建：
+
+
+    connect: 接受请求，创建 request 和 respond ,并开辟线程交由 Container 处理
+
+
+Java 需要编码的场景：
+    1. IO 操作编码，
+            字节转字符，字符转字节， 磁盘io， 网络io;
+    2. 内存操作编码
+            内存操作编码：
+            String s="你好";
+            byte[] bytes = s.getByte("UTF-8");
+            String str = new String(bytes, "UTF-8");
+            
+    3. response 数据的解码， request 数据的编码 
+        
+        客户端： POST 表单的编解码：
+            1. 浏览器根据ContentType 的charset对 表单数据进行编码
+            2. 服务器端根据 ContentType charset 对表单数据进行解码
+            request.setCharactEncoding("UTF-8")
+            request.getParameter()
+        
+        服务器端：Body 的编解码：
+            response.setCharacterEncoding  ->   设置 HeaderType, 返回给 客户端
+            
+            
+        JDBC 编解码：要和DB编码保持一致
+            JDBC url:
+                url="jdbc:mysql://localhost:3306/DB?useUnicode=true&charactorEncong=UTF-8"
+            
+Tomcat 常用配置：
+    beta 环境学习： http://qtown.corp.qunar.com/online/learning.html?courseId=198
+
+
+
+
 
 
