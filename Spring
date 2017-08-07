@@ -1,0 +1,109 @@
+Spring 简介
+1. DI 容器：
+    依赖注入
+2. AOP 与代理
+  面向切面编程
+3.  web mvc
+
+4. Spring Boot
+  
+  
+DI：
+  依赖注入
+  组建之间的依赖关系由容器在运行时决定
+  容器动态的将某个依赖关系注入到组建中
+
+
+Spring 容器：
+  管理 java bean 实例 的空间
+  DI 容器的主要组建
+  Bean 再容器中有特定的生命周期
+  BeanFactory 利用 DI 将 程序依赖性规范 与 程序实现 解耦
+
+BeanFactory 和 ApplicationContext
+  BeanFactory:
+      spring 中较为原始的 API， 定义了DI容器基本操作
+      默认实现 DedefaultListBeanFactory
+      生产环境一般不用
+  ApplicationContext :
+      派生于 BeanFactory 接口
+  
+Bean 生命周期：
+    实例化 - 》 装配属性 -》 Aware 设置？？  -》 初始化  -》 业务操作
+    -》  销毁
+    
+spring core  API:
+    Core
+      
+      
+AOP 与 代理      
+     Aspect Oriented Programming
+     面向切面编程
+     基于代理实现 AOP
+     
+     1. 代理：
+        1. 静态代理：
+            1. 接口，基于接口 做代理
+            2. 创建代理需要一个 被代理对象(实现了某一个接口) 的实例
+            
+        2. java 动态代理
+            1. 基于InvocationHandle 和 proxy 实现
+            2. 可重用
+            3. Spring AOP 优先选择
+            
+        3. cglib 代理           //    消耗大
+            1. 能够对接口和类进行代理
+            2. 通过生成子类的方式 代理对象
+            3. 不能代理  final 类和私有方法
+     2. 工作原理：
+        客户端调用目标 bean, APP(client) ->  SpringFramework  ->  TargetBean
+        
+        SpringFramework:  Proxy ->  advisor 
+            advisor:   advice  ->  pointcut
+     3. 概念：
+        1. JointPoint  ->  
+          在程序中插入横切 关键点 的 扩展点。针对 具体方法 的 具体执行点 的一个操作
+        2. PointCut :  切入点
+          选择一组相关连接点的模式，即可以认为试 连接点 的集合
+     `  3. Advice :
+          在连接点上执行的行为
+        4.Aspect 切面/方面
+          横切关注点的模块化，可以认为是，通知，引入，和切入点的组合。
+        5. Target Object
+          需要被织入 横切关注点的 对象
+        6. AOP 代理
+          AOP 框架使用代理模式创建的对象。
+        
+        7. 织入 weaving：
+          织入是一个过程，将切面应用到目标对象从而创建出AOP代理对象的过程，
+        8. 前置通知
+        9. 后置通知
+        0. 环绕通知
+        
+ AOP注解实例分析：
+    @Aspect           ->  代表是基于AOP注解的方式
+    @Component   ->  ->  代表的是一个 spring bean   
+    @PointCut("execution( * com.somepackage.*.* )")    ->  扫描此包所有方法
+    @Around( "aspect()" );        ->  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+
+
+
+
+
+
