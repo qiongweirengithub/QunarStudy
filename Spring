@@ -86,7 +86,86 @@ AOP 与 代理
     @PointCut("execution( * com.somepackage.*.* )")    ->  扫描此包所有方法
     @Around( "aspect()" );        ->  
       
-      
+AOP 例子：  http://blog.sina.com.cn/s/blog_7cf112e00100vdk8.html
+    环境要求：
+    1. Web应用
+    2. 有一个专门提供系统服务的Service层
+    我们的目标是，如果用户调用Service层中任一方法，都在其插入一个记录信息的功能。     
+    
+    1. 创建一个新的 AOP分为两步：
+        1. 定义 Aspect:
+            1.  package com.sarkuya.aop.aspect;
+                import org.aspectj.lang.annotation.Aspect;
+                import org.aspectj.lang.annotation.Before;
+                @Aspect                                           ->        定义一个 Aspect 类，必须使用@Aspect在类名之前注解
+                public class SampleAspect {
+                  // =================当用户调用com.sarkuya.service包中任一类的任一方法，在调用前，
+                  // =================Spring将自动执行下面的doBeforeInServiceLayer()方法，此方法只是简单地打印一些信息
+                  @Before("execution(* com.sarkuya.service..*.*(..))")
+                  public void doBeforeInServiceLayer() {
+                      System.out.println("Log");
+                      System.out.println("Aop: do before in Service layer");
+                     System.out.println("Log");
+                    }
+                }
+        2. 在Spring配置文件applicationContext.xml中配置
+            <aop:aspectj-autoproxy />
+            <bean class="com.sarkuya.aop.aspect.SampleAspect" />
+            
+            
+            
+    2. 将Pointcut及Advice分开
+        Pointcut是植入Advice的触发条件.
+        上面的Aspect中混杂了Pointcut及Advice，因此最好将其分开。共有3步。
+            1.  定义 pointCut
+                package com.sarkuya.aop.aspect;
+                import org.aspectj.lang.annotation.Aspect;
+                import org.aspectj.lang.annotation.PointCut;
+                @Aspect                                           ->        定义一个 Aspect 类，必须使用@Aspect在类名之前注解
+                public class SampleAspect {
+                  // ==================每个Pointcut的定义包括2部分，一是表达式，二是方法签名。 
+                  // ==================方法签名必须是 public及void型。
+                  // ==================可以将Pointcut中的方法看作是一个被Advice引用的  助记符，
+                  // ==================因为表达式不直观，因此我们可以通过方法签名的方式为 此表达式命名。
+                  // ==================因此Pointcut中的方法只需要方法签名，而不需要在方法体内编写实际代码。
+                  @PointCut("execution(* com.sarkuya.service..*.*(..))")   // ======================标记位置
+                  public void inServiceLayer() {} //=====================助记符                  
+                }
+             2.  定义 Advice 
+                package com.sarkuya.aop.advice;
+                import org.aspectj.lang.annotation.Aspect;
+                import org.aspectj.lang.annotation.Before;
+                @Aspect                                           ->        定义一个 Aspect 类，必须使用@Aspect在类名之前注解
+                public class SampleAspect {
+                  
+                  //  before 方式
+                  @Before("com.sarkuya.aop.aspect.SampleAspect.inServiceLayer()")  //==================引用 pointCut 
+                  public void doBeforeInServiceLayer() {
+                      System.out.println("Log");
+                      System.out.println("Aop: do before in Service layer");
+                      System.out.println("Log");
+                  }
+                  
+                  //  around 方式
+                  @Around("com.sarkuya.aop.aspect.SampleAspect.inServiceLayer()")
+                  public void around(ProceedingJoinPoint pjp) throws Throwable{    // ProceedingJoinPoint pjp 的意义！！！
+                     this.printLog("已经记录下操作日志@Around 方法执行前");
+                     pjp.proceed();
+                     this.printLog("已经记录下操作日志@Around 方法执行后");
+                  }
+                  
+                  
+                }
+              
+             3. 配置文件， 注意： 只需配置SampleAdvice，无需配置SampleAspect。 ！！！！！！！！！！
+                <aop:aspectj-autoproxy />
+                <bean class="com.sarkuya.aop.advice.SampleAdvice" />
+            
+            
+            
+      3.ProceedingJoinPoint 参数详解： 
+            http://blog.csdn.net/confirmaname/article/details/9735975
+    
       
       
 Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
@@ -243,7 +322,10 @@ Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
             @Async异步方法调用
 
 
-
+@ContextConfiguration Spring整合JUnit4测试时，使用注解  引入多个配置文件 , 重点！
+    1. @ContextConfiguration(Locations="../applicationContext.xml")  
+    2. @ContextConfiguration(classes = SimpleConfiguration.class)
+    3. @ContextConfiguration(locations = { "classpath*:/spring1.xml", "classpath*:/spring2.xml" })  
 
 
 
