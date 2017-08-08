@@ -84,6 +84,9 @@ AOP 与 代理
     @Aspect           ->  代表是基于AOP注解的方式
     @Component   ->  ->  代表的是一个 spring bean   
     @PointCut("execution( * com.somepackage.*.* )")    ->  扫描此包所有方法
+           注解表达式关键词：
+                http://blog.csdn.net/congyihao/article/details/70053218
+                
     @Around( "aspect()" );        ->  
       
 AOP 例子：  http://blog.sina.com.cn/s/blog_7cf112e00100vdk8.html
@@ -146,7 +149,7 @@ AOP 例子：  http://blog.sina.com.cn/s/blog_7cf112e00100vdk8.html
                       System.out.println("Log");
                   }
                   
-                  //  around 方式
+                  //  around 方式  
                   @Around("com.sarkuya.aop.aspect.SampleAspect.inServiceLayer()")
                   public void around(ProceedingJoinPoint pjp) throws Throwable{    // ProceedingJoinPoint pjp 的意义！！！
                      this.printLog("已经记录下操作日志@Around 方法执行前");
@@ -163,9 +166,19 @@ AOP 例子：  http://blog.sina.com.cn/s/blog_7cf112e00100vdk8.html
             
             
             
-      3.ProceedingJoinPoint 参数详解： 
+      3. ProceedingJoinPoint 参数详解： 使用： @around用poceedingjointpoint
             http://blog.csdn.net/confirmaname/article/details/9735975
-    
+            
+      4. JointPoint
+            http://blog.csdn.net/it_cookie_sam/article/details/56489296    
+      
+      
+      ProceedingJoinPoint 与  JointPoint 的区别是什么 ？？？？？？？？？？？？？？？？？？？
+      
+      
+      
+      
+      
       
       
 Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
@@ -257,7 +270,19 @@ Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
                 @Service("Zoo")
                 @Scope("prototype")
                 public class Zoo{};
+                
+                
+          8. @PostConstruct   -> 构造完成后 执行的函数 public?private?
+          9. @PreDestroy
+          0. @inject
             
+            
+          生命周期类型：
+              singlen, Prototype, 
+              Request：  http://blog.csdn.net/u013412790/article/details/52556425
+              session, global session 
+          
+          
     使用注解来构造 IOC 容器：
         想要使用上述注解@service的方式 向容器中注册 bean , 需要在 applicationContext.xml中 注册：
                     <context:component-scan base-package=”pagkage1[,pagkage2,…,pagkageN]”/>
