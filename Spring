@@ -89,162 +89,162 @@ AOP 与 代理
       
       
       
-Spring 使用方式：
-    1.   定义未bean
-    
-        <bean id="zoo" class="com.spring.model.Zoo" >
-            <property name="tiger" ref="tiger" />           // 相当于对 zoo 的成员遍历哪个进行初始化
-            <property name="monkey" ref="monkey" />
-        </bean>
+Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
+        1.   定义未bean
 
-        <bean id="tiger" class="com.spring.model.Tiger" />
-        <bean id="monkey" class="com.spring.model.Monkey" />
-    
-    2. 获取 bean 
-        ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext2.xml");
-        Zoo zoo=(Zoo) ctx.getBean("zoo");
-        System.out.println(zoo.toString());
-    
-    3. @Autowired 使用,  其作用是为了消除代码Java代码里面的getter/setter 与  bean属性中的 property
-    
-        <context:component-scan base-package="com.spring" />   //  自动装配扫描路径
-        <bean id="zoo" class="com.spring.model.Zoo" />         //  定义bean
-        <bean id="tiger" class="com.spring.model.Tiger" />
-        <bean id="monkey" class="com.spring.model.Monkey" />
-        
-        使用： 
-            public class Zoo {
-                @Autowired(required=false)   // 未找到不会报错
-                private Tiger tiger;
-                
-                @Autowired
-                private Monkey monkey;
-                
-                public String toString(){
-                    return tiger + "\n" + monkey;
+            <bean id="zoo" class="com.spring.model.Zoo" >
+                <property name="tiger" ref="tiger" />           // 相当于对 zoo 的成员遍历哪个进行初始化
+                <property name="monkey" ref="monkey" />
+            </bean>
+
+            <bean id="tiger" class="com.spring.model.Tiger" />
+            <bean id="monkey" class="com.spring.model.Monkey" />
+
+        2. 获取 bean 
+            ApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext2.xml");
+            Zoo zoo=(Zoo) ctx.getBean("zoo");
+            System.out.println(zoo.toString());
+
+        3. @Autowired 使用,  其作用是为了消除代码Java代码里面的getter/setter 与  bean属性中的 property
+
+            <context:component-scan base-package="com.spring" />   //  自动装配扫描路径
+            <bean id="zoo" class="com.spring.model.Zoo" />         //  定义bean
+            <bean id="tiger" class="com.spring.model.Tiger" />
+            <bean id="monkey" class="com.spring.model.Monkey" />
+
+            使用： 
+                public class Zoo {
+                    @Autowired(required=false)   // 未找到不会报错
+                    private Tiger tiger;
+
+                    @Autowired
+                    private Monkey monkey;
+
+                    public String toString(){
+                        return tiger + "\n" + monkey;
+                    }
                 }
-            }
 
-    4. Qualifier（指定注入Bean的名称）
-        如果容器中有一个以上匹配的Bean，会出现以下错误：
-        No unique bean of type [com.spring.service.ICar] is defined: expected single matching bean but found 2: [bmwCar, benz]
-        可以通过@Qualifier注解限定Bean的名称。
-        使用方式：
-            @Autowired
-            @Qualifier("bmwCar")     //  装配 bean 中的 bmCar   
-            private ICar car;    
-        
-    5. @resource
-        使用方法：
-            @Resource(name="tiger")
-            private Tiger tiger;
-    
-            @Resource(type=Monkey.class)
-            private Monkey monkey;
-
-        规则： 
-        @Resource后面没有任何内容，默认通过name属性去匹配bean，找不到再按type去匹配
-        指定了name或者type则根据指定的类型去匹配bean
-        指定了name和type则根据指定的name和type去匹配bean，任何一个不匹配都将 报错！！！！！！！
-        
-        @Autowired默认按照byType方式进行bean匹配，@Resource默认按照byName方式进行bean匹配
-        @Autowired是Spring的注解，@Resource是J2EE的注解，这个看一下导入注解的时候这两个注解的包名就一清二楚了
-      
-    6. @Service
-        配置文件：
-            <beans
-                <context:component-scan base-package="com.spring" />
-            </beans>
-        使用方式：
-            @Service    //    重点  或者 @Service(Zoo)
-            public class Zoo {
-                @Autowired
-                private Tiger tiger;
-
-                @Autowired
-                private Monkey monkey;
-
-                public String toString(){
-                    return tiger + "\n" + monkey;
-                }
-            }
-         @Service注解，其实做了两件事情： 
-            1. 声明Zoo.java是一个bean，并进行注册，！！
-                很重要，因为 Zoo.java 是一个bean，只有 一个类 声明为为一个 bean, 
-                其他的类才可以使用 @Autowired 将Zoo作为一个 成员变量自动注入。
-            2. Zoo.java在bean中的id是"zoo"，即类名且首字母小写,可以通过上述第二种方式控制注册的 bean 的名称。
-      
-      7. @scope 声明： 配置@Scope，默认是"singleton"即单例，"prototype"表示原型即每次都会new一个新的出来。
-            @Service("Zoo")
-            @Scope("prototype")
-            public class Zoo{};
-            
-使用注解来构造 IOC 容器：
-    想要使用上述注解@service的方式 向容器中注册 bean , 需要在 applicationContext.xml中 注册：
-                <context:component-scan base-package=”pagkage1[,pagkage2,…,pagkageN]”/>
-    
-    如果某个类的头上带有特定的注解【@Component/@Repository/@Service/@Controller】，就会将这个对象作为Bean注册进Spring容器。
-    
-    1.  @component  是所有受Spring 管理组件的通用形式，@Component注解可以放在类的头上，@Component不推荐使用。
-    2.  @Controller对应表现层的Bean，也就是Action
-        例如：
-            @Controller      -> 注册类名 ueraction          
-            // 其他形式如果指定value【@Controller(value="UserAction")】或者【@Controller("UserAction")】，则使用value作为bean的名字
-            @Scope("prototype")
-            public class UserAction extends BaseAction<User>{
-             ……
-            }
-    3.  @Service
-            @Service对应的是业务层Bean，例如：
-            @Service("userService")         //  类注册名称为 userService
-            public class UserServiceImpl implements UserService {
-            ………
-            }
+        4. Qualifier（指定注入Bean的名称）
+            如果容器中有一个以上匹配的Bean，会出现以下错误：
+            No unique bean of type [com.spring.service.ICar] is defined: expected single matching bean but found 2: [bmwCar, benz]
+            可以通过@Qualifier注解限定Bean的名称。
             使用方式：
-            @Resource(name = "userService")     //  注意与 @Autowired
-            private UserService userService;
-            
-            注释：Action对"UserServiceImpl"类的“控制权”已经被“反转”了，原来主动权在自己手上，
-                自己要使用"UserServiceImpl"类的实例，自己主动去new一个出来马上就可以使用了，
-                但现在自己不能主动去new "UserServiceImpl"类的实例，new "UserServiceImpl"类的实例的权力已经被Spring拿走了，
-                只有Spring才能够new "UserServiceImpl"类的实例，
-                而Action只能等Spring创建好"UserServiceImpl"类的实例后，再“恳求”Spring把创建好的"UserServiceImpl"类的实例给他，
-                这样他才能够使用"UserServiceImpl"，这就是Spring核心思想“控制反转”，也叫“依赖注入”.
-    
-    4. @repository
-        @Repository对应数据访问层Bean ，例如：
-            @Repository(value="userDao")
-            public class UserDaoImpl extends BaseDaoImpl<User> {
-            ………
-            }
- 
-Spring常用注解汇总 ：
+                @Autowired
+                @Qualifier("bmwCar")     //  装配 bean 中的 bmCar   
+                private ICar car;    
 
-        本文汇总了Spring的常用注解，以方便大家查询和使用，具体如下：
-        使用注解之前要开启自动扫描功能，其中base-package为需要扫描的包(含子包)。
-        <context:component-scan base-package="cn.test"/> 
-        @Configuration把一个类作为一个IoC容器，它的某个方法头上如果注册了@Bean，就会作为这个Spring容器中的Bean。
-        @Scope注解 作用域
-        @Lazy(true) 表示延迟初始化
-        @Service用于标注业务层组件、 
-        @Controller用于标注控制层组件（如struts中的action）
-        @Repository用于标注数据访问组件，即DAO组件。
-        @Component泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
-        @Scope用于指定scope作用域的（用在类上）
-        @PostConstruct用于指定初始化方法（用在方法上）
-        @PreDestory用于指定销毁方法（用在方法上）
-        @DependsOn：定义Bean初始化及销毁时的顺序
-        @Primary：自动装配时当出现多个Bean候选者时，被注解为@Primary的Bean将作为首选者，否则将抛出异常
-        @Autowired 默认按类型装配，如果我们想使用按名称装配，可以结合@Qualifier注解一起使用。如下：
-        @Autowired @Qualifier("personDaoBean") 存在多个实例配合使用
-        @Resource默认按名称装配，当找不到与名称匹配的bean才会按类型装配。
-        @PostConstruct 初始化注解
-        @PreDestroy 摧毁注解 默认 单例  启动就加载
-        @Async异步方法调用
-      
-      
-      
-      
+        5. @resource
+            使用方法：
+                @Resource(name="tiger")
+                private Tiger tiger;
+
+                @Resource(type=Monkey.class)
+                private Monkey monkey;
+
+            规则： 
+            @Resource后面没有任何内容，默认通过name属性去匹配bean，找不到再按type去匹配
+            指定了name或者type则根据指定的类型去匹配bean
+            指定了name和type则根据指定的name和type去匹配bean，任何一个不匹配都将 报错！！！！！！！
+
+            @Autowired默认按照byType方式进行bean匹配，@Resource默认按照byName方式进行bean匹配
+            @Autowired是Spring的注解，@Resource是J2EE的注解，这个看一下导入注解的时候这两个注解的包名就一清二楚了
+
+        6. @Service
+            配置文件：
+                <beans
+                    <context:component-scan base-package="com.spring" />
+                </beans>
+            使用方式：
+                @Service    //    重点  或者 @Service(Zoo)
+                public class Zoo {
+                    @Autowired
+                    private Tiger tiger;
+
+                    @Autowired
+                    private Monkey monkey;
+
+                    public String toString(){
+                        return tiger + "\n" + monkey;
+                    }
+                }
+             @Service注解，其实做了两件事情： 
+                1. 声明Zoo.java是一个bean，并进行注册，！！
+                    很重要，因为 Zoo.java 是一个bean，只有 一个类 声明为为一个 bean, 
+                    其他的类才可以使用 @Autowired 将Zoo作为一个 成员变量自动注入。
+                2. Zoo.java在bean中的id是"zoo"，即类名且首字母小写,可以通过上述第二种方式控制注册的 bean 的名称。
+
+          7. @scope 声明： 配置@Scope，默认是"singleton"即单例，"prototype"表示原型即每次都会new一个新的出来。
+                @Service("Zoo")
+                @Scope("prototype")
+                public class Zoo{};
+            
+    使用注解来构造 IOC 容器：
+        想要使用上述注解@service的方式 向容器中注册 bean , 需要在 applicationContext.xml中 注册：
+                    <context:component-scan base-package=”pagkage1[,pagkage2,…,pagkageN]”/>
+
+        如果某个类的头上带有特定的注解【@Component/@Repository/@Service/@Controller】，就会将这个对象作为Bean注册进Spring容器。
+
+        1.  @component  是所有受Spring 管理组件的通用形式，@Component注解可以放在类的头上，@Component不推荐使用。
+        2.  @Controller对应表现层的Bean，也就是Action
+            例如：
+                @Controller      -> 注册类名 ueraction          
+                // 其他形式如果指定value【@Controller(value="UserAction")】或者【@Controller("UserAction")】，则使用value作为bean的名字
+                @Scope("prototype")
+                public class UserAction extends BaseAction<User>{
+                 ……
+                }
+        3.  @Service
+                @Service对应的是业务层Bean，例如：
+                @Service("userService")         //  类注册名称为 userService
+                public class UserServiceImpl implements UserService {
+                ………
+                }
+                使用方式：
+                @Resource(name = "userService")     //  注意与 @Autowired
+                private UserService userService;
+
+                注释：Action对"UserServiceImpl"类的“控制权”已经被“反转”了，原来主动权在自己手上，
+                    自己要使用"UserServiceImpl"类的实例，自己主动去new一个出来马上就可以使用了，
+                    但现在自己不能主动去new "UserServiceImpl"类的实例，new "UserServiceImpl"类的实例的权力已经被Spring拿走了，
+                    只有Spring才能够new "UserServiceImpl"类的实例，
+                    而Action只能等Spring创建好"UserServiceImpl"类的实例后，再“恳求”Spring把创建好的"UserServiceImpl"类的实例给他，
+                    这样他才能够使用"UserServiceImpl"，这就是Spring核心思想“控制反转”，也叫“依赖注入”.
+
+        4. @repository
+            @Repository对应数据访问层Bean ，例如：
+                @Repository(value="userDao")
+                public class UserDaoImpl extends BaseDaoImpl<User> {
+                ………
+                }
+
+    Spring常用注解汇总 ：
+
+            本文汇总了Spring的常用注解，以方便大家查询和使用，具体如下：
+            使用注解之前要开启自动扫描功能，其中base-package为需要扫描的包(含子包)。
+            <context:component-scan base-package="cn.test"/> 
+            @Configuration把一个类作为一个IoC容器，它的某个方法头上如果注册了@Bean，就会作为这个Spring容器中的Bean。
+            @Scope注解 作用域
+            @Lazy(true) 表示延迟初始化
+            @Service用于标注业务层组件、 
+            @Controller用于标注控制层组件（如struts中的action）
+            @Repository用于标注数据访问组件，即DAO组件。
+            @Component泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。
+            @Scope用于指定scope作用域的（用在类上）
+            @PostConstruct用于指定初始化方法（用在方法上）
+            @PreDestory用于指定销毁方法（用在方法上）
+            @DependsOn：定义Bean初始化及销毁时的顺序
+            @Primary：自动装配时当出现多个Bean候选者时，被注解为@Primary的Bean将作为首选者，否则将抛出异常
+            @Autowired 默认按类型装配，如果我们想使用按名称装配，可以结合@Qualifier注解一起使用。如下：
+            @Autowired @Qualifier("personDaoBean") 存在多个实例配合使用
+            @Resource默认按名称装配，当找不到与名称匹配的bean才会按类型装配。
+            @PostConstruct 初始化注解
+            @PreDestroy 摧毁注解 默认 单例  启动就加载
+            @Async异步方法调用
+
+
+
+
 
 
 
