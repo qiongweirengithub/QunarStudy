@@ -355,6 +355,39 @@ Spring 使用方式：     ->   http://www.cnblogs.com/xiaoxi/p/5935009.html
 
 
 
+SpringMVC  M:model, v:view, c:control
+       架构： 
+        1. 前端控制器   ->   dispatherServlet 
+        2. 页面控制器   ->   
+        3. 模型
+        4. 视图
+       开发步骤：
+        1. 创建pom.xml,添加依赖
+        2. 配置前端控制器，DispatcherServlet-> web.xml
+        3. spring-mvc.xml  ->  配置基于注解<mvc:annotation-driver>
+        4. 页面控制器 Controller 业务开发相关，将url映射到这里，业务比如用户登录 ->  src/main/java
+        5. 开发的视图页面(jsp,vm，json, ..) -> src/main/webapp
+        6. 单元测测试
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
