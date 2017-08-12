@@ -371,9 +371,9 @@ SpringMVC  M:model, v:view, c:control
 
 
 
-
-
-
+ springmvc post 参数转换到对象：
+        http://blog.csdn.net/emac/article/details/70493030
+        http://blog.csdn.net/u011537073/article/details/51843386
 
 
 
